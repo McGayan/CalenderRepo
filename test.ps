@@ -11,7 +11,7 @@
 /cageHeight 40 mm def
 /headerHeight 8 mm def
 /cageWidth 50 mm def
-/headerFontHeight 3.5 mm def
+/headerFontHeight 4.5 mm def
 /dateHeight 3 mm def
 
 /BullsEye {
@@ -129,8 +129,14 @@
 /DrawText_center {
 	gsave
 		moveto
-		dup stringwidth pop
-		2 div neg 0 rmoveto
+		/fScale currentfont /FontMatrix get 0 get def
+		dup stringwidth pop 2 div neg
+		currentfont /FontBBox get
+		dup 3 get 2 div exch 1 get add neg fScale  mul
+		2 copy == ==
+		%newpath
+		rmoveto
+		%stroke
 		show
 	grestore
 
