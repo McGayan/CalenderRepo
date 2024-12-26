@@ -122,6 +122,17 @@
 	grestore
 } def
 
+%string x y
+/DrawText_baseline_right_aligned {
+	gsave
+		moveto
+		/fScale currentfont /FontMatrix get 0 get def
+		dup stringwidth pop neg
+		0 rmoveto
+		show
+	grestore
+} def
+
 %upperRight {x, y}
 /DrawMonthCage {
 	2 copy	
@@ -131,6 +142,16 @@
 	cageHeight add
 	cageWidth headerHeight rectstroke
 	
+} def
+
+%str1 str2
+/strcat {
+	/str2 exch def
+	/str1 exch def
+	/strNew str1 length str2 length add string def
+	strNew 0 str1 putinterval
+	strNew str1 length str2 putinterval
+	strNew
 } def
 
 %monthIndex llcX llcY
@@ -144,12 +165,38 @@
 	/headerCenterY y0 cageHeight headerHeight 2 div add add def
 	headerCenterX headerCenterY BullsEye
 	months monthIndex get headerCenterX headerCenterY DrawText_center_aligned
+
+	%draw the days header
+	%get the widths of all characters in the days header (SuMoTu...)
+	/Helvetica findfont dateHeight scalefont setfont
+	()	%puhs empty string first
+	w {
+		strcat
+	} forall
+	stringwidth pop dup ==
+	cageWidth exch sub 8 div	% calculate the x  spacing value
+	/incX exch def
+	%incX ==
+	%calculate y spacing value (row spacing))
+	cageHeight 7 div
+	/incY exch def
+	%x0 y0 cageHeight add incY sub dateHeight sub  moveto
+	w 0 get stringwidth pop
+	/x exch x0 add incX add def
+	w {
+		dup
+		%x ==
+		x y0 cageHeight add incY sub dateHeight sub DrawText_baseline_right_aligned
+		/x exch stringwidth pop incX add x add def
+		%/x x incX add def
+	} forall
+	
 } def
 
 2 2 scale
 
 11 7 mm 7 mm DrawMonth
-
+(HEELO) (WORLD) strcat
 
 %getTextHeight ==
 %(January) stringwidth pop ==
