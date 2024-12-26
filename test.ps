@@ -63,6 +63,7 @@
 	y 4 mod 0 eq y 100 mod 0 ne and y 400 mod 0 eq or	
 } def
 
+%Find number of days of a given month in a given year
 %year month
 /noOfDays {
 	/m exch def
@@ -93,6 +94,23 @@
 	6 add 7 mod	%adjustment for week starting from Monday
 	%w exch get
 	%==
+} def
+
+%year monthIndex
+/FillMonthGrid {
+	/month exch def
+	/year exch def
+	/days year month noOfDays def
+	/arr 35 array def
+	/firstDay year month 1 dayOfWeek def
+	0 1 34 {
+		arr exch (*) put
+	} for
+
+	firstDay 1 firstDay days add 1 sub{
+		arr exch dup 35 mod exch firstDay sub 1 add put
+	} for
+	arr ==
 } def
 
 %string x y
@@ -183,20 +201,23 @@
 	%x0 y0 cageHeight add incY sub dateHeight sub  moveto
 	w 0 get stringwidth pop
 	/x exch x0 add incX add def
+	/posArr 7 array def
+	/arrayIndex 0 def
 	w {
 		dup
 		%x ==
+		posArr arrayIndex x put
+		/arrayIndex arrayIndex 1 add def
 		x y0 cageHeight add incY sub dateHeight sub DrawText_baseline_right_aligned
 		/x exch stringwidth pop incX add x add def
 		%/x x incX add def
 	} forall
-	
 } def
 
 2 2 scale
 
 11 7 mm 7 mm DrawMonth
-(HEELO) (WORLD) strcat
+2024 4 FillMonthGrid
 
 %getTextHeight ==
 %(January) stringwidth pop ==
