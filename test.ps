@@ -7,7 +7,8 @@
 /Leading FontHeight 10 add def
 /PosX 100 def
 /PosY 750 def
-/w [(Su) (Mo) (Tu) (We) (Th) (Fr) (Sa)] def
+/w [(Mo) (Tu) (We) (Th) (Fr) (Sa) (Su)] def
+/months [(January) (February) (March) (April) (May) (June) (July) (August) (September) (October) (November) (December)] def
 /cageHeight 40 mm def
 /headerHeight 8 mm def
 /cageWidth 50 mm def
@@ -43,38 +44,6 @@
 	stroke
 	PosX PosY moveto
 	show
-} def
-
-/arrayTest {
-	/myArray [10 20 30 40 50] def
-	myArray { == } forall
-	myArray 2 get ==
-	myArray 3 20.3 put
-} def
-
-/ifTest {
-	/max 100 def
-	45 max lt {(less) ==} {(larger) ==} ifelse
-} def
-
-/loopTest {
-	4 {(Hello) ==} repeat
-	10 2 20 {==} for
-	(-----------) ==
-	/counter 0 def
-	/Max 10 def
-	/inc 1 def
-	{	counter ==
-		counter Max gt {exit} if
-		/counter counter inc add def
-	} loop
-} def
-
-/funcTest {
-	/x exch def
-	/y exch def
-	x ==
-	y ==
 } def
 
 /getTextHeight {
@@ -120,26 +89,37 @@
 	/y exch def
 	/t [0 3 2 5 0 3 5 1 4 6 2 4] def
 	m 3 lt {/y y 1 sub def} if
-	y y 4 idiv add y 100 idiv sub y 400 idiv add t m 1 sub get add d add 7 mod
+	y y 4 idiv add y 100 idiv sub y 400 idiv add t m 1 sub get add d add 7 mod	%index for week starting from Sunday
+	6 add 7 mod	%adjustment for week starting from Monday
 	%w exch get
 	%==
 } def
 
 %string x y
-/DrawText_center {
+/DrawText_center_aligned {
 	gsave
 		moveto
 		/fScale currentfont /FontMatrix get 0 get def
 		dup stringwidth pop 2 div neg
 		currentfont /FontBBox get
 		dup 3 get 2 div exch 1 get add neg fScale  mul
-		2 copy == ==
-		%newpath
 		rmoveto
-		%stroke
 		show
 	grestore
 
+} def
+
+%string x y
+/DrawText_right_aligned {
+	gsave
+		moveto
+		/fScale currentfont /FontMatrix get 0 get def
+		dup stringwidth pop neg
+		currentfont /FontBBox get
+		dup 3 get 2 div exch 1 get add neg fScale mul
+		rmoveto
+		show
+	grestore
 } def
 
 %upperRight {x, y}
@@ -153,17 +133,27 @@
 	
 } def
 
+%monthIndex llcX llcY
+/DrawMonth {
+	/y0 exch def
+	/x0 exch def
+	/monthIndex exch def
+	x0 y0 DrawMonthCage
+	/Helvetica findfont headerFontHeight scalefont setfont
+	/headerCenterX x0 cageWidth 2  div add def
+	/headerCenterY y0 cageHeight headerHeight 2 div add add def
+	headerCenterX headerCenterY BullsEye
+	months monthIndex get headerCenterX headerCenterY DrawText_center_aligned
+} def
+
 2 2 scale
-/x0 7 mm def
-/y0 7 mm def
-x0 y0 DrawMonthCage
-/Helvetica findfont headerFontHeight scalefont setfont
-getTextHeight ==
-(January) stringwidth pop ==
-/headerCenterX x0 cageWidth 2  div add def
-/headerCenterY y0 cageHeight headerHeight 2 div add add def
-headerCenterX headerCenterY BullsEye
-(January) headerCenterX headerCenterY DrawText_center
+
+11 7 mm 7 mm DrawMonth
+
+
+%getTextHeight ==
+%(January) stringwidth pop ==
+
 %(0 Hello World ## 123) DrawText
 %ifTest
 %loopTest
