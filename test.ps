@@ -108,9 +108,13 @@
 	} for
 
 	firstDay 1 firstDay days add 1 sub{
-		arr exch dup 35 mod exch firstDay sub 1 add put
+		/tmpStr 2 string def
+		dup /intDay exch firstDay sub 1 add def
+		intDay 10 lt {/tmpStr 1 string def} if
+		intDay tmpStr cvs pop
+		arr exch 35 mod tmpStr  put
 	} for
-	arr ==
+	arr dup ==
 } def
 
 %string x y
@@ -172,17 +176,18 @@
 	strNew
 } def
 
-%monthIndex llcX llcY
+%year monthIndex llcX llcY
 /DrawMonth {
 	/y0 exch def
 	/x0 exch def
 	/monthIndex exch def
+	/year exch def
 	x0 y0 DrawMonthCage
 	/Helvetica findfont headerFontHeight scalefont setfont
 	/headerCenterX x0 cageWidth 2  div add def
 	/headerCenterY y0 cageHeight headerHeight 2 div add add def
 	headerCenterX headerCenterY BullsEye
-	months monthIndex get headerCenterX headerCenterY DrawText_center_aligned
+	months monthIndex 1 sub get headerCenterX headerCenterY DrawText_center_aligned
 
 	%draw the days header
 	%get the widths of all characters in the days header (SuMoTu...)
@@ -194,30 +199,37 @@
 	stringwidth pop dup ==
 	cageWidth exch sub 8 div	% calculate the x  spacing value
 	/incX exch def
-	%incX ==
 	%calculate y spacing value (row spacing))
 	cageHeight 7 div
 	/incY exch def
-	%x0 y0 cageHeight add incY sub dateHeight sub  moveto
 	w 0 get stringwidth pop
 	/x exch x0 add incX add def
+	/yPos y0 cageHeight add incY sub dateHeight sub def
 	/posArr 7 array def
 	/arrayIndex 0 def
 	w {
 		dup
-		%x ==
 		posArr arrayIndex x put
 		/arrayIndex arrayIndex 1 add def
-		x y0 cageHeight add incY sub dateHeight sub DrawText_baseline_right_aligned
+		x yPos DrawText_baseline_right_aligned
 		/x exch stringwidth pop incX add x add def
-		%/x x incX add def
 	} forall
+	/mArr year monthIndex FillMonthGrid def
+	0 1 34 {
+		/i exch def
+		/weekI i 7 mod def
+		weekI 0 eq{
+			%start of a new week row
+			/yPos yPos incY sub dateHeight sub def
+		} if
+		mArr i get posArr weekI get yPos DrawText_baseline_right_aligned
+	}for
+
 } def
 
 2 2 scale
 
-11 7 mm 7 mm DrawMonth
-2024 4 FillMonthGrid
+2024 12 7 mm 15 mm DrawMonth
 
 %getTextHeight ==
 %(January) stringwidth pop ==
