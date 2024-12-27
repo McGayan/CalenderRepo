@@ -114,7 +114,7 @@
 		intDay tmpStr cvs pop
 		arr exch 35 mod tmpStr  put
 	} for
-	arr dup ==
+	arr
 } def
 
 %string x y
@@ -186,7 +186,7 @@
 	/Helvetica findfont headerFontHeight scalefont setfont
 	/headerCenterX x0 cageWidth 2  div add def
 	/headerCenterY y0 cageHeight headerHeight 2 div add add def
-	headerCenterX headerCenterY BullsEye
+	%headerCenterX headerCenterY BullsEye
 	months monthIndex 1 sub get headerCenterX headerCenterY DrawText_center_aligned
 
 	%draw the days header
@@ -196,11 +196,11 @@
 	w {
 		strcat
 	} forall
-	stringwidth pop dup ==
+	stringwidth pop
 	cageWidth exch sub 8 div	% calculate the x  spacing value
 	/incX exch def
 	%calculate y spacing value (row spacing))
-	cageHeight 7 div
+	cageHeight getTextHeight 5 mul sub 7 div
 	/incY exch def
 	w 0 get stringwidth pop
 	/x exch x0 add incX add def
@@ -227,9 +227,36 @@
 
 } def
 
-2 2 scale
+%2 2 scale
 
-2024 12 7 mm 15 mm DrawMonth
+/pagePaddingLR 5 mm def
+/pagePaddingTB 15 mm def
+/pageH 297 mm def
+/pageW 210 mm def
+/calYear 2024 def
+0 mm 0 mm pageW pageH rectstroke
+0 mm pagePaddingLR add  0 mm pagePaddingTB add pageW pagePaddingLR 2 mul sub pageH pagePaddingTB 2 mul sub rectstroke
+
+/cellIncX pageW pagePaddingLR 2 mul sub cageWidth 3 mul sub 2 div def
+/cellIncY pageH pagePaddingTB 2 mul sub cageHeight headerHeight add 4 mul sub 3 div def
+
+/xStart pagePaddingLR def
+/yStart pageH pagePaddingTB sub cageHeight headerHeight add sub def
+
+%2024 01 xStart yStart DrawMonth
+%2024 02 xStart cellIncX add cageWidth add  yStart DrawMonth
+
+/calMonth 1 def
+0 1 3 {
+	/rowN exch def
+	0 1 2 {
+		/colN exch def
+		calYear calMonth xStart cageWidth cellIncX add colN mul add yStart cageHeight headerHeight add cellIncY add rowN mul sub DrawMonth
+		/calMonth calMonth 1 add def
+	} for
+} for
+
+%2024 12 7 mm 15 mm DrawMonth
 
 %getTextHeight ==
 %(January) stringwidth pop ==
