@@ -15,6 +15,19 @@
 /headerFontHeight 5 mm def
 /dateHeight 4 mm def
 /headerColor [.67 .91 .99] def
+/holidays [[[13 (Duruthu Full Moon Poya Day) (f)] [14 (Tamil Thai Pongal Day) (MPB)]]
+[[04 (Independence Day) (MPB) ] [12 (Nawam Full Moon Poya Day) (f)] [26 (Maha Sivarathri Day) (PB)]]
+[[13 (Medin Full Moon Poya Day) (f)] [31 (Id-Ul-Fitr Ramazan Festival Day) (PB)]]
+[[12 (Bak Full Moon Poya Day) (f)] [13 (Day Prior to Sinhala and Tamil New Year Day) (MPB)] [14 (Sinhala and Tamil New Year Day) (MPB)] [15 (Special Bank Holiday) (B)] [18 (Good Friday) (PB)]]
+[[01 (May Day International Workers Day) (MPB)] [12 (Vesak Full Moon Poya Day) (f)] [13 (Day Following Vesak Full Moon Poya Day) (MPB)]]
+[[07 (Id-Ul-Alha Hadji Festival Day) (PB)] [10 (Poson Full Moon Poya Day) (f)]]
+[[10 (Esala Full Moon Poya Day) (f)]]
+[[08 (Nikini Full Moon Poya Day) (f)]]
+[[05 (Milad-Un-Nabi Holy Prophet’s Birthday) (MPB)] [07 (Binara Full Moon Poya Day) (f)]]
+[[06 (Vap Full Moon Poya Day) (f)] [20 (Deepavali Festival Day) (PB)]]
+[[05 (Il Full Moon Poya Day) (f)]]
+[[04 (Unduvap Full Moon Poya Day) (f)] [25 (Christmas Day) (MPB) ]]] def
+
 << /PageSize [210 mm 297 mm] >> setpagedevice
 
 /SetArrayColor {
@@ -50,6 +63,14 @@
 	stroke
 	PosX PosY moveto
 	show
+} def
+
+/getBaseToCenterYDis {
+	currentfont /FontBBox get
+	dup 1 get
+	exch 3 get
+	add 2 div
+	currentfont /FontMatrix get 0 get mul
 } def
 
 /getTextHeight {
@@ -213,11 +234,14 @@
 	w 0 get stringwidth pop
 	/x exch x0 add incX add def
 	/yPos y0 cageHeight add incY sub dateHeight sub def
-	/posArr 7 array def
+	/posXArr 7 array def
 	/arrayIndex 0 def
+	/monthSpecialArr holidays monthIndex 1 sub get def
+	/specialArrIndex 0 def
+	/specialDay  monthSpecialArr length specialArrIndex gt {monthSpecialArr specialArrIndex get} {[-1 (n) (n)]} ifelse def
 	w {
 		dup
-		posArr arrayIndex x put
+		posXArr arrayIndex x put
 		/arrayIndex arrayIndex 1 add def
 		x yPos DrawText_baseline_right_aligned
 		/x exch stringwidth pop incX add x add def
@@ -237,7 +261,22 @@
 				0 0 0 setrgbcolor
 			} ifelse
 		} ifelse
-		mArr i get posArr weekI get yPos DrawText_baseline_right_aligned
+		/strDate mArr i get def
+		strDate (*) ne {
+			strDate cvi specialDay 0 get eq {
+				specialDay 2 get 0 get (f) 0 get  eq { %poya day
+					gsave
+						1 1 0 setrgbcolor
+						posXArr weekI get strDate stringwidth pop 2 div sub yPos getBaseToCenterYDis add 3 mm 0 360 arc fill
+						1 0 0 setrgbcolor 0.2 setlinewidth
+						posXArr weekI get strDate stringwidth pop 2 div sub yPos getBaseToCenterYDis add 3 mm 0 360 arc stroke
+					grestore
+				}if
+				/specialArrIndex specialArrIndex 1 add def
+				/specialDay monthSpecialArr length specialArrIndex gt {monthSpecialArr specialArrIndex get} {[-1 (n) (n)] } ifelse def
+			} if
+		} if
+		strDate posXArr weekI get yPos DrawText_baseline_right_aligned
 		0 0 0 setrgbcolor
 	}for
 
