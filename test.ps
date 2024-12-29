@@ -15,6 +15,11 @@
 /headerFontHeight 5 mm def
 /dateHeight 4 mm def
 /headerColor [.67 .91 .99] def
+/publicHolidayColor [0.686275 0.952941 0.992157] def
+/mercantileColor [ 0.890196 0.992157 1] def
+/holidayRectWidth 5 mm def
+/poyacircleRadius 3 mm def
+
 /holidays [[[13 (Duruthu Full Moon Poya Day) (f)] [14 (Tamil Thai Pongal Day) (MPB)]]
 [[04 (Independence Day) (MPB) ] [12 (Nawam Full Moon Poya Day) (f)] [26 (Maha Sivarathri Day) (PB)]]
 [[13 (Medin Full Moon Poya Day) (f)] [31 (Id-Ul-Fitr Ramazan Festival Day) (PB)]]
@@ -264,14 +269,32 @@
 		/strDate mArr i get def
 		strDate (*) ne {
 			strDate cvi specialDay 0 get eq {
-				specialDay 2 get 0 get (f) 0 get  eq { %poya day
+				/cellCenterX posXArr weekI get strDate stringwidth pop 2 div sub def
+				/cellCenterY yPos getBaseToCenterYDis add def
+				specialDay 2 get 0 get (f) 0 get eq { %poya day
 					gsave
 						1 1 0 setrgbcolor
-						posXArr weekI get strDate stringwidth pop 2 div sub yPos getBaseToCenterYDis add 3 mm 0 360 arc fill
+						cellCenterX cellCenterY 3 mm 0 360 arc fill
 						1 0 0 setrgbcolor 0.2 setlinewidth
-						posXArr weekI get strDate stringwidth pop 2 div sub yPos getBaseToCenterYDis add 3 mm 0 360 arc stroke
+						cellCenterX cellCenterY 3 mm 0 360 arc stroke
 					grestore
-				}if
+				} {
+					specialDay 2 get 0 get (M) 0 get eq {% Mercantile holiday
+						gsave
+							mercantileColor SetArrayColor
+							cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth rectfill
+							1 0 0 setrgbcolor 0.3 setlinewidth
+							cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth rectstroke
+						grestore
+					} {
+						specialDay 2 get 0 get (P) 0 get eq {% Public holiday
+							gsave
+								publicHolidayColor SetArrayColor
+								cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth rectfill
+							grestore
+						} if
+					} ifelse
+				} ifelse
 				/specialArrIndex specialArrIndex 1 add def
 				/specialDay monthSpecialArr length specialArrIndex gt {monthSpecialArr specialArrIndex get} {[-1 (n) (n)] } ifelse def
 			} if
