@@ -14,6 +14,7 @@
 /cageWidth 58 mm def
 /headerFontHeight 5 mm def
 /dateHeight 4 mm def
+/LegendFontHeight 3 mm def
 /headerColor [.67 .91 .99] def
 /publicHolidayColor [0.686275 0.952941 0.992157] def
 /mercantileColor [ 0.890196 0.992157 1] def
@@ -210,6 +211,53 @@
 	strNew
 } def
 
+%centerX centerY radius
+/DrawPoyadayMarker {
+	3 dict begin
+	/r exch def
+	/cy exch def
+	/cx exch def
+	gsave
+		1 1 0 setrgbcolor
+		cx cy r 0 360 arc fill
+		1 0 0 setrgbcolor
+		0.2 setlinewidth
+		cx cy r 0 360 arc stroke
+	grestore
+	end
+} def
+
+%centerX centerY width height
+/DrawMercentileMarker {
+	4 dict begin
+	/h exch def
+	/w exch def
+	/cy exch def
+	/cx exch def
+	gsave
+		mercantileColor SetArrayColor
+		cx cy w h rectfill
+		1 0 0 setrgbcolor
+		0.3 setlinewidth
+		cx cy w h rectstroke
+	grestore
+	end
+} def
+
+%centerX centerY width height
+/DrawPublicHolidayMarker {
+	4 dict begin
+	/h exch def
+	/w exch def
+	/cy exch def
+	/cx exch def
+	gsave
+		publicHolidayColor SetArrayColor
+		cx cy w h rectfill
+	grestore
+	end
+} def
+
 %year monthIndex llcX llcY
 /DrawMonth {
 	/y0 exch def
@@ -273,26 +321,13 @@
 				/cellCenterX posXArr weekI get strDate stringwidth pop 2 div sub def
 				/cellCenterY yPos getBaseToCenterYDis add def
 				specialDay 2 get 0 get (f) 0 get eq { %poya day
-					gsave
-						1 1 0 setrgbcolor
-						cellCenterX cellCenterY 3 mm 0 360 arc fill
-						1 0 0 setrgbcolor 0.2 setlinewidth
-						cellCenterX cellCenterY 3 mm 0 360 arc stroke
-					grestore
+						cellCenterX cellCenterY poyacircleRadius DrawPoyadayMarker
 				} {
 					specialDay 2 get 0 get (M) 0 get eq {% Mercantile holiday
-						gsave
-							mercantileColor SetArrayColor
-							cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth rectfill
-							1 0 0 setrgbcolor 0.3 setlinewidth
-							cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth rectstroke
-						grestore
+						cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth DrawMercentileMarker
 					} {
 						specialDay 2 get 0 get (P) 0 get eq {% Public holiday
-							gsave
-								publicHolidayColor SetArrayColor
-								cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth rectfill
-							grestore
+							cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth DrawPublicHolidayMarker
 						} if
 					} ifelse
 				} ifelse
@@ -322,9 +357,8 @@
 /xStart pagePaddingLR def
 /yStart pageH pagePaddingTB sub cageHeight headerHeight add sub def
 
-%2024 01 xStart yStart DrawMonth
-%2024 02 xStart cellIncX add cageWidth add  yStart DrawMonth
 
+%main month loop
 /calMonth 1 def
 0 1 3 {
 	/rowN exch def
@@ -335,22 +369,22 @@
 	} for
 } for
 
+%Draw the year title
 /Helvetica findfont 18 mm scalefont setfont
 /strYear 4 string def
 calYear strYear cvs
 strYear pageW 2 div pageH pagePaddingTB .6 mul sub  DrawText_center_aligned
 
-%2024 12 7 mm 15 mm DrawMonth
+/Helvetica findfont LegendFontHeight scalefont setfont
+/legendBaseLineY .75 pagePaddingTB mul def
+xStart cageWidth cellIncX add 0 mul add legendBaseLineY holidayRectWidth holidayRectWidth DrawMercentileMarker
+pagePaddingLR 2 holidayRectWidth mul add legendBaseLineY moveto
+(Public Holiday) show
 
-%getTextHeight ==
-%(January) stringwidth pop ==
+xStart cageWidth cellIncX add 1 mul add poyacircleRadius add legendBaseLineY poyacircleRadius 0.5 mul add poyacircleRadius DrawPoyadayMarker
+xStart cageWidth cellIncX add 1 mul add poyacircleRadius 3 mul add legendBaseLineY moveto
+(Poya Day) show
 
-%(0 Hello World ## 123) DrawText
-%ifTest
-%loopTest
-%10.5 20.5 funcTest
-%2024 12 noOfDays
-%4 isLeapYear ==
-%arrayTest
-%2012 2 29 dayOfWeek
-
+xStart cageWidth cellIncX add 2 mul add legendBaseLineY holidayRectWidth holidayRectWidth DrawMercentileMarker
+xStart cageWidth cellIncX add 2 mul add 2 holidayRectWidth mul add legendBaseLineY moveto
+(Mercentile Holiday) show
