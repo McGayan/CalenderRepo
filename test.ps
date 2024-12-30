@@ -238,7 +238,8 @@
 	/incY exch def
 	w 0 get stringwidth pop
 	/x exch x0 add incX add def
-	/yPos y0 cageHeight add incY sub dateHeight sub def
+	/yPos y0 cageHeight add 1.2 incY mul sub dateHeight sub def
+	yPos ==
 	/posXArr 7 array def
 	/arrayIndex 0 def
 	/monthSpecialArr holidays monthIndex 1 sub get def
@@ -251,6 +252,7 @@
 		x yPos DrawText_baseline_right_aligned
 		/x exch stringwidth pop incX add x add def
 	} forall
+	/yPos yPos 1.4  incY mul sub def
 	/Helvetica findfont dateHeight scalefont setfont
 	/mArr year monthIndex FillMonthGrid def
 	0 1 34 {
@@ -308,7 +310,7 @@
 %2 2 scale
 
 /pagePaddingLR 5 mm def
-/pagePaddingTB 15 mm def
+/pagePaddingTB 30 mm def
 /pageH 297 mm def
 /pageW 210 mm def
 /calYear 2100 def
@@ -333,6 +335,11 @@
 		/calMonth calMonth 1 add def
 	} for
 } for
+
+/Helvetica findfont 2.2 mm scalefont setfont
+/strYear 4 string def
+calYear strYear cvs
+strYear pageW 2 div pageH pagePaddingTB 2 div DrawText_center_aligned
 
 %2024 12 7 mm 15 mm DrawMonth
 
