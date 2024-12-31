@@ -193,15 +193,15 @@ useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bo
 
 %upperRight {x, y}
 /DrawMonthCage {
-	2 copy	
-	%2 copy	BullsEye
-	cageWidth cageHeight headerHeight add rectstroke
-
+	2 copy		
+	
+	.5 setlinewidth
 	cageHeight add
 	headerColor SetArrayColor
 	cageWidth headerHeight rectfill
-	0 0 0 setrgbcolor
 	
+	0 0 0 setrgbcolor
+	cageWidth cageHeight headerHeight add rectstroke
 } def
 
 %str1 str2
