@@ -21,6 +21,9 @@
 /holidayRectWidth 5 mm def
 /poyacircleRadius 3 mm def
 
+/useSerifFont true def
+useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bold def} {/selectedFont /Helvetica def  /selectedBoldFont /Helvetica-Bold def} ifelse
+
 /holidays [[[13 (Duruthu Full Moon Poya Day) (f)] [14 (Tamil Thai Pongal Day) (MPB)]]
 [[04 (Independence Day) (MPB) ] [12 (Nawam Full Moon Poya Day) (f)] [26 (Maha Sivarathri Day) (PB)]]
 [[13 (Medin Full Moon Poya Day) (f)] [31 (Id-Ul-Fitr Ramazan Festival Day) (PB)]]
@@ -218,8 +221,24 @@
 	/cy exch def
 	/cx exch def
 	gsave
+		newpath
 		1 1 0 setrgbcolor
 		cx cy r 0 360 arc fill
+		1 0 0 setrgbcolor
+		0.2 setlinewidth
+		cx cy r 0 360 arc stroke
+	grestore
+	end
+} def
+
+%centerX centerY radius
+/DrawBankHolidayMarker {
+	3 dict begin
+	/r exch def
+	/cy exch def
+	/cx exch def
+	gsave
+		newpath
 		1 0 0 setrgbcolor
 		0.2 setlinewidth
 		cx cy r 0 360 arc stroke
@@ -265,7 +284,7 @@
 	/monthIndex exch def
 	/year exch def
 	x0 y0 DrawMonthCage
-	/Helvetica-Bold findfont headerFontHeight scalefont setfont
+	selectedBoldFont findfont headerFontHeight scalefont setfont
 	/headerCenterX x0 cageWidth 2  div add def
 	/headerCenterY y0 cageHeight headerHeight 2 div add add def
 	%headerCenterX headerCenterY BullsEye
@@ -273,7 +292,7 @@
 
 	%draw the days header
 	%get the widths of all characters in the days header (SuMoTu...)
-	/Helvetica-Bold findfont dateHeight scalefont setfont
+	selectedBoldFont findfont dateHeight scalefont setfont
 	()	%puhs empty string first
 	w {
 		strcat
@@ -300,7 +319,7 @@
 		/x exch stringwidth pop incX add x add def
 	} forall
 	/yPos yPos 1.4  incY mul sub def
-	/Helvetica findfont dateHeight scalefont setfont
+	selectedFont findfont dateHeight scalefont setfont
 	/mArr year monthIndex FillMonthGrid def
 	0 1 34 {
 		/i exch def
@@ -328,7 +347,11 @@
 					} {
 						specialDay 2 get 0 get (P) 0 get eq {% Public holiday
 							cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth DrawPublicHolidayMarker
-						} if
+						} {
+							specialDay 2 get 0 get (B) 0 get eq {% Mercantile holiday 
+								cellCenterX cellCenterY poyacircleRadius DrawBankHolidayMarker
+							} if
+						} ifelse
 					} ifelse
 				} ifelse
 				/specialArrIndex specialArrIndex 1 add def
@@ -349,7 +372,7 @@
 /pageW 210 mm def
 /calYear 2025 def
 0 mm 0 mm pageW pageH rectstroke
-0 mm pagePaddingLR add  0 mm pagePaddingTB add pageW pagePaddingLR 2 mul sub pageH pagePaddingTB 2 mul sub rectstroke
+%0 mm pagePaddingLR add  0 mm pagePaddingTB add pageW pagePaddingLR 2 mul sub pageH pagePaddingTB 2 mul sub rectstroke
 
 /cellIncX pageW pagePaddingLR 2 mul sub cageWidth 3 mul sub 2 div def
 /cellIncY pageH pagePaddingTB 2 mul sub cageHeight headerHeight add 4 mul sub 3 div def
@@ -370,21 +393,28 @@
 } for
 
 %Draw the year title
-/Helvetica findfont 18 mm scalefont setfont
+selectedFont findfont 18 mm scalefont setfont
 /strYear 4 string def
 calYear strYear cvs
 strYear pageW 2 div pageH pagePaddingTB .6 mul sub  DrawText_center_aligned
 
-/Helvetica findfont LegendFontHeight scalefont setfont
+%Draw Legend
+/legendScale 0.75 def
+selectedFont findfont LegendFontHeight scalefont setfont
 /legendBaseLineY .75 pagePaddingTB mul def
-xStart cageWidth cellIncX add 0 mul add legendBaseLineY holidayRectWidth holidayRectWidth DrawMercentileMarker
-pagePaddingLR 2 holidayRectWidth mul add legendBaseLineY moveto
+/legendIncX pageW pagePaddingLR 2 mul sub 5 div def
+xStart legendBaseLineY holidayRectWidth legendScale mul holidayRectWidth legendScale mul DrawPublicHolidayMarker
+pagePaddingLR 2 holidayRectWidth legendScale mul mul add legendBaseLineY moveto
 (Public Holiday) show
 
-xStart cageWidth cellIncX add 1 mul add poyacircleRadius add legendBaseLineY poyacircleRadius 0.5 mul add poyacircleRadius DrawPoyadayMarker
-xStart cageWidth cellIncX add 1 mul add poyacircleRadius 3 mul add legendBaseLineY moveto
+xStart legendIncX 1 mul poyacircleRadius legendScale mul add add legendBaseLineY poyacircleRadius legendScale mul add poyacircleRadius legendScale mul DrawPoyadayMarker
+xStart legendIncX 1 mul add poyacircleRadius legendScale mul 3 mul add legendBaseLineY moveto
 (Poya Day) show
 
-xStart cageWidth cellIncX add 2 mul add legendBaseLineY holidayRectWidth holidayRectWidth DrawMercentileMarker
-xStart cageWidth cellIncX add 2 mul add 2 holidayRectWidth mul add legendBaseLineY moveto
+xStart legendIncX 2 mul add legendBaseLineY holidayRectWidth legendScale mul holidayRectWidth legendScale mul DrawMercentileMarker
+xStart legendIncX 2 mul add 2 holidayRectWidth legendScale mul mul add legendBaseLineY  moveto
 (Mercentile Holiday) show
+
+xStart legendIncX 3 mul poyacircleRadius legendScale mul add add legendBaseLineY poyacircleRadius legendScale mul 0.5 mul add poyacircleRadius legendScale mul DrawBankHolidayMarker
+xStart legendIncX 3 mul add poyacircleRadius legendScale mul 3 mul add legendBaseLineY moveto
+(Bank Holiday) show
