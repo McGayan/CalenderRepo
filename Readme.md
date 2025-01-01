@@ -71,4 +71,4 @@ Header height defines the header of the month cage. The header contains the labe
 ```
 
 ### Holiday configurations
-	The holiday highlighting support mainly covers Sri Lankan calendar. The Holidays are defined as array of holiday entries. Each holiday entry defines an single holiday and it is also an array.
+The holiday highlighting support mainly covers Sri Lankan calendar. The Holidays are defined as array of holiday entries. Each holiday entry defines an single holiday and it is also an array.
