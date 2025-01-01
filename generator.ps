@@ -23,6 +23,7 @@
 
 /useSerifFont true def
 useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bold def} {/selectedFont /Helvetica def  /selectedBoldFont /Helvetica-Bold def} ifelse
+/drawCage true def
 
 /holidays [[[13 (Duruthu Full Moon Poya Day) (f)] [14 (Tamil Thai Pongal Day) (MPB)]]
 [[04 (Independence Day) (MPB) ] [12 (Nawam Full Moon Poya Day) (f)] [26 (Maha Sivarathri Day) (PB)]]
@@ -283,7 +284,7 @@ useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bo
 	/x0 exch def
 	/monthIndex exch def
 	/year exch def
-	x0 y0 DrawMonthCage
+	drawCage true eq { x0 y0 DrawMonthCage} if
 	selectedBoldFont findfont headerFontHeight scalefont setfont
 	/headerCenterX x0 cageWidth 2  div add def
 	/headerCenterY y0 cageHeight headerHeight 2 div add add def
@@ -304,7 +305,7 @@ useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bo
 	cageHeight getTextHeight 5 mul sub 7 div
 	/incY exch def
 	w 0 get stringwidth pop
-	/x exch x0 add incX add def
+	/x exch x0 add incX 0.8 mul add def
 	/yPos y0 cageHeight add 1.2 incY mul sub dateHeight sub def
 	/posXArr 7 array def
 	/arrayIndex 0 def
@@ -313,11 +314,13 @@ useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bo
 	/specialDay  monthSpecialArr length specialArrIndex gt {monthSpecialArr specialArrIndex get} {[-1 (n) (n)]} ifelse def
 	w {
 		dup
-		posXArr arrayIndex x put
-		/arrayIndex arrayIndex 1 add def
 		x yPos DrawText_baseline_right_aligned
-		/x exch stringwidth pop incX add x add def
+		stringwidth pop dup
+		posXArr exch arrayIndex exch 0.15 mul x exch sub  put	%dates column is shifted slightly to the left of the left edge of the week lable
+		/arrayIndex arrayIndex 1 add def
+		/x exch incX add x add def
 	} forall
+
 	/yPos yPos 1.4  incY mul sub def
 	selectedFont findfont dateHeight scalefont setfont
 	/mArr year monthIndex FillMonthGrid def
@@ -366,7 +369,7 @@ useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bo
 
 %2 2 scale
 
-/pagePaddingLR 5 mm def
+/pagePaddingLR 8 mm def
 /pagePaddingTB 30 mm def
 /pageH 297 mm def
 /pageW 210 mm def
