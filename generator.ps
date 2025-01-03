@@ -48,7 +48,7 @@ useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bo
 << /PageSize [pageW pageH] >> setpagedevice
 
 /SetArrayColor {
-	dup 0 get exch dup 1 get exch 2 get setrgbcolor
+	{ } forall setrgbcolor
 } def
 
 /BullsEye {
@@ -306,6 +306,7 @@ useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bo
 	
 	w {
 		dup
+		w w length 1 sub get eq {1 0 0 setrgbcolor} if dup
 		x yPos DrawText_baseline_right_aligned
 		stringwidth pop dup
 		posXArr exch arrayIndex exch 0.15 mul x exch sub  put	%dates column is shifted slightly to the left of the left edge of the week lable
