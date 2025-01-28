@@ -22,13 +22,14 @@
 /LegendFontHeight 3 mm def
 /yearFontHeight 18 mm def
 
-/headerColor [.67 .91 .99] def
-/publicHolidayColor [0.686275 0.952941 0.992157] def
-/mercantileColor [ 0.890196 0.992157 1] def
+/headerColor [1 0.701961 0.839216] def
+
+/publicHolidayColor [ 1 .8 0.894118] def
+/mercantileColor [1 0.901961      0.945098] def
 /holidayRectWidth 5 mm def
 /poyacircleRadius 3 mm def
 
-/useSerifFont true def
+/useSerifFont false def
 useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bold def} {/selectedFont /Helvetica def  /selectedBoldFont /Helvetica-Bold def} ifelse
 /drawCage true def
 
@@ -313,7 +314,7 @@ useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bo
 		/arrayIndex arrayIndex 1 add def
 		/x exch incX add x add def
 	} forall
-
+	0 0 0 setrgbcolor	%Reset to black from Red Sundays
 	/yPos yPos 1.4  incY mul sub def
 	selectedFont findfont dateFontHeight scalefont setfont
 	/mArr year monthIndex FillMonthGrid def
