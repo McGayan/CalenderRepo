@@ -1,3 +1,39 @@
+/pagePaddingTB pagePaddingTB 3 div def
+
+/oldCageHeight cageHeight def
+/cageWidth pageW 2 div pagePaddingLR 2 mul sub def
+/cageHeight pageH 2 div pagePaddingTB 2 mul sub def
+
+%calculate the new scaling. slightly reduce the calculated value-
 %!ps
 
-(diary mode) ==
+%for better spacing between rows.
+/newFontScale cageHeight oldCageHeight div .8 mul def
+%rescale all the parameters
+/headerFontHeight headerFontHeight newFontScale mul def
+/dateFontHeight dateFontHeight newFontScale mul def
+/LegendFontHeight LegendFontHeight newFontScale mul def
+/poyacircleRadius poyacircleRadius newFontScale mul def
+/holidayRectWidth holidayRectWidth newFontScale mul def
+
+/headerHeight headerHeight newFontScale mul def
+/cageHeight cageHeight headerHeight sub def
+
+/gridLinePitch 7 mm def
+
+
+
+1 2 12 {
+    /monthIndex exch def
+    /xStart pagePaddingLR def
+    /yStart pageH pagePaddingTB sub cageHeight headerHeight add sub def
+
+    calYear monthIndex xStart yStart DrawMonth
+
+    /yStart yStart cageHeight headerHeight add pagePaddingTB 2 mul add sub def
+    calYear monthIndex 1 add xStart yStart DrawMonth
+    
+    showpage
+} for
+
+
