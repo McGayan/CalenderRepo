@@ -1,1 +1,1 @@
-gs   -o output.pdf   -sDEVICE=pdfwrite   -dPDFSETTINGS=/prepress   -dHaveTrueTypes=true   -dEmbedAllFonts=true   -dSubsetFonts=false   -c ".setpdfwrite <</NeverEmbed [ ]>> setdistillerparams"   -f generator.ps
+"C:\Program Files (x86)\gs\gs10.04.0\bin\gswin32c.exe" -o output.pdf -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress -dHaveTrueTypes=true -dEmbedAllFonts=true -dSubsetFonts=false -c ".setpdfwrite <</NeverEmbed [ ]>> setdistillerparams" -f generator.ps
