@@ -1,0 +1,49 @@
+%!ps
+
+0 mm 0 mm pageW pageH rectstroke
+%0 mm pagePaddingLR add  0 mm pagePaddingTB add pageW pagePaddingLR 2 mul sub pageH pagePaddingTB 2 mul sub rectstroke
+
+/cellIncX pageW pagePaddingLR 2 mul sub cageWidth 3 mul sub 2 div def
+/cellIncY pageH pagePaddingTB 2 mul sub cageHeight headerHeight add 4 mul sub 3 div def
+
+/xStart pagePaddingLR def
+/yStart pageH pagePaddingTB sub cageHeight headerHeight add sub def
+
+
+%main month loop
+/calMonth 1 def
+0 1 3 {
+	/rowN exch def
+	0 1 2 {
+		/colN exch def
+		calYear calMonth xStart cageWidth cellIncX add colN mul add yStart cageHeight headerHeight add cellIncY add rowN mul sub DrawMonth
+		/calMonth calMonth 1 add def
+	} for
+} for
+
+%Draw the year title
+selectedFont findfont yearFontHeight scalefont setfont
+/strYear 4 string def
+calYear strYear cvs pop
+strYear pageW 2 div pageH pagePaddingTB .6 mul sub  DrawText_center_aligned
+
+%Draw Legend
+/legendScale 0.75 def
+selectedFont findfont LegendFontHeight scalefont setfont
+/legendBaseLineY .75 pagePaddingTB mul def
+/legendIncX pageW pagePaddingLR 2 mul sub 5 div def
+xStart legendBaseLineY holidayRectWidth legendScale mul holidayRectWidth legendScale mul DrawPublicHolidayMarker
+pagePaddingLR 2 holidayRectWidth legendScale mul mul add legendBaseLineY moveto
+(Public Holiday) show
+
+xStart legendIncX 1 mul poyacircleRadius legendScale mul add add legendBaseLineY poyacircleRadius legendScale mul add poyacircleRadius legendScale mul DrawPoyadayMarker
+xStart legendIncX 1 mul add poyacircleRadius legendScale mul 3 mul add legendBaseLineY moveto
+(Poya Day) show
+
+xStart legendIncX 2 mul add legendBaseLineY holidayRectWidth legendScale mul holidayRectWidth legendScale mul DrawMercentileMarker
+xStart legendIncX 2 mul add 2 holidayRectWidth legendScale mul mul add legendBaseLineY  moveto
+(Mercentile Holiday) show
+
+xStart legendIncX 3 mul poyacircleRadius legendScale mul add add legendBaseLineY poyacircleRadius legendScale mul 0.5 mul add poyacircleRadius legendScale mul DrawBankHolidayMarker
+xStart legendIncX 3 mul add poyacircleRadius legendScale mul 3 mul add legendBaseLineY moveto
+(Bank Holiday) show
