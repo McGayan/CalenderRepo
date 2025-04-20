@@ -21,7 +21,38 @@
 
 /gridLinePitch 7 mm def
 
-
+%llcX, llcY, width, height
+/exercise_book_page {
+	/ph exch def
+	/pw exch def
+	/py0 exch def
+	/px0 exch def
+	%/gridLinePitch ph pagePaddingTB 2 mul sub lineCount div def
+	/lineCount ph pagePaddingTB sub gridLinePitch div truncate def
+	
+	/x px0 pagePaddingLR add def
+	/y py0 gridLinePitch add def
+	%/lineCount 1 sub def
+	.26 .64 .96 setrgbcolor
+	2 1 lineCount {
+        /lineIndex exch def
+        %gridLinePitch ==
+        x y moveto
+        x pw pagePaddingTB 2 mul
+        sub add y lineto
+        stroke
+        /y y gridLinePitch add def
+        %y ==
+        
+	} for
+	%draw the margin line (red-just margin)
+	/justMarginGap .75 inch def
+	.90 .24 .34 setrgbcolor
+	/x px0 pagePaddingLR add justMarginGap add def
+	x py0 moveto
+	x py0 ph add pagePaddingTB sub lineto
+	stroke
+} def
 
 1 2 12 {
     /monthIndex exch def
@@ -29,9 +60,11 @@
     /yStart pageH pagePaddingTB sub cageHeight headerHeight add sub def
 
     calYear monthIndex xStart yStart DrawMonth
+    pageW 2 div pageH 2 div pageW 2 div pageH 2 div exercise_book_page
 
     /yStart yStart cageHeight headerHeight add pagePaddingTB 2 mul add sub def
     calYear monthIndex 1 add xStart yStart DrawMonth
+    pageW 2 div 0 pageW 2 div pageH 2 div exercise_book_page
     
     showpage
 } for
