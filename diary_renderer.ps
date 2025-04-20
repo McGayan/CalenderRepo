@@ -4,9 +4,9 @@
 /cageWidth pageW 2 div pagePaddingLR 2 mul sub def
 /cageHeight pageH 2 div pagePaddingTB 2 mul sub def
 
-%calculate the new scaling. slightly reduce the calculated value-
 %!ps
 
+%calculate the new scaling. slightly reduce the calculated value-
 %for better spacing between rows.
 /newFontScale cageHeight oldCageHeight div .8 mul def
 %rescale all the parameters
@@ -31,7 +31,7 @@
 	/lineCount ph pagePaddingTB sub gridLinePitch div truncate def
 	
 	/x px0 pagePaddingLR add def
-	/y py0 gridLinePitch add def
+	/y py0 gridLinePitch 2 mul add def
 	%/lineCount 1 sub def
 	.26 .64 .96 setrgbcolor
 	2 1 lineCount {
@@ -49,7 +49,7 @@
 	/justMarginGap .75 inch def
 	.90 .24 .34 setrgbcolor
 	/x px0 pagePaddingLR add justMarginGap add def
-	x py0 moveto
+	x py0 pagePaddingTB add moveto
 	x py0 ph add pagePaddingTB sub lineto
 	stroke
 } def
@@ -68,5 +68,4 @@
     
     showpage
 } for
-
 
