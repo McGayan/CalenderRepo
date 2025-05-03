@@ -28,7 +28,7 @@
 /headerColor [1 0.701961 0.839216] def
 
 /publicHolidayColor [ 1 .8 0.894118] def
-/mercantileColor [1 0.901961      0.945098] def
+/mercantileColor [1 0.901961	  0.945098] def
 /holidayRectWidth 5 mm def
 /poyacircleRadius 3 mm def
 
@@ -50,16 +50,16 @@ useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bo
 [[04 (Unduvap Full Moon Poya Day) (f)] [25 (Christmas Day) (MPB) ]]] def
 
 calMode calModeEnum /fullpage get eq {
-    (Render Mode: FullPage ------) ==
+	(Render Mode: FullPage ------) ==
 } {
-    calMode calModeEnum /diarymode get eq {
-        (Render Mode: Diary ------) ==
-        /tmp pageH def
-        /pageH pageW def
-        /pageW tmp def
-    } {
-        (Undefined calender Mode) ==
-    } ifelse
+	calMode calModeEnum /diarymode get eq {
+		(Render Mode: Diary ------) ==
+		/tmp pageH def
+		/pageH pageW def
+		/pageW tmp def
+	} {
+		(Undefined calender Mode) ==
+	} ifelse
 } ifelse
 
 << /PageSize [pageW pageH] >> setpagedevice
@@ -90,14 +90,14 @@ calMode calModeEnum /fullpage get eq {
 } def
 
 /getTextHeight {
-    % Get the font dictionary and retrieve FontBBox
-    gsave
-    currentfont /FontBBox get % Get FontBBox array [llx lly urx ury]
-    dup 3 get                    % Extract lly (bottom)
-    exch 1 get                    % Extract ury (top)
-    sub                      % Subtract bottom from top (height)
-    currentfont /FontMatrix get 0 get mul % Scale to font size
-    grestore
+	% Get the font dictionary and retrieve FontBBox
+	gsave
+	currentfont /FontBBox get % Get FontBBox array [llx lly urx ury]
+	dup 3 get					% Extract lly (bottom)
+	exch 1 get					% Extract ury (top)
+	sub					  % Subtract bottom from top (height)
+	currentfont /FontMatrix get 0 get mul % Scale to font size
+	grestore
 } def
 
 %year
@@ -409,13 +409,13 @@ calMode calModeEnum /fullpage get eq {
 } def
 
 calMode calModeEnum /fullpage get eq {
-    (./fullpage_renderer.ps) run
+	(./fullpage_renderer.ps) run
 } {
-    calMode calModeEnum /diarymode get eq {
-       (./diary_renderer.ps) run
-    } {
-        (Undefined calender Mode) ==
-    } ifelse
+	calMode calModeEnum /diarymode get eq {
+	   (./diary_renderer.ps) run
+	} {
+		(Undefined calender Mode) ==
+	} ifelse
 } ifelse
 
 
