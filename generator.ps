@@ -187,6 +187,25 @@ calMode calModeEnum /fullpage get eq {
 	grestore
 } def
 
+%string x y noFill
+/DrawText_right_bottom_aligned {
+	/noFill exch def
+	gsave
+		moveto
+		/fScale currentfont /FontMatrix get 0 get def
+		dup stringwidth pop neg
+		currentfont /FontBBox get
+		dup 3 get exch 1 get add neg fScale mul
+		rmoveto
+		noFill{
+			true charpath
+			stroke
+		} {
+			show
+		} ifelse
+	grestore
+} def
+
 %string x y
 /DrawText_baseline_right_aligned {
 	gsave

@@ -94,6 +94,26 @@
     grestore
 } def
 
+%llcX, llcY, cageWidth, cageHeight, headerHeight, year
+/printYear {
+	/yearPadding 5 def
+	/year exch def
+	/headerH exch def
+	/ch exch def
+	/cw exch def
+	/y0 exch yearPadding sub def
+	/x0 exch yearPadding sub def
+	/tmpString 20 string def
+	/strYear year tmpString cvs def
+	
+	gsave
+	.6 setgray
+	selectedFont findfont headerFontHeight scalefont setfont
+	strYear x0 cw add y0 ch add headerH add true DrawText_right_bottom_aligned
+	grestore
+} def
+
+
 1 2 12 {
     /monthIndex_ exch def
     /xStart pagePaddingLR def
@@ -101,11 +121,13 @@
     /sDayFontH 8 def
     
     calYear monthIndex_ xStart yStart DrawMonth
+    xStart yStart cageWidth cageHeight headerHeight calYear printYear
     pageW 2 div pageH 2 div pageW 2 div pageH 2 div exercise_book_page
     xStart yStart sDayFontH getPitch sub cageWidth sDayFontH monthIndex_ print_special_days
 
     /yStart yStart cageHeight headerHeight add pagePaddingTB 1.5 mul add sub def
     calYear monthIndex_ 1 add xStart yStart DrawMonth
+    xStart yStart cageWidth cageHeight headerHeight calYear printYear
     pageW 2 div .5 pagePaddingTB mul pageW 2 div pageH 2 div exercise_book_page
     xStart yStart sDayFontH getPitch sub cageWidth sDayFontH monthIndex_ 1 add print_special_days
     showpage
