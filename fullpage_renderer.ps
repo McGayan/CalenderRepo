@@ -1,13 +1,14 @@
 %!ps
 
+/_g CloneDrawState def
 0 mm 0 mm pageW pageH rectstroke
 %0 mm pagePaddingLR add  0 mm pagePaddingTB add pageW pagePaddingLR 2 mul sub pageH pagePaddingTB 2 mul sub rectstroke
 
-/cellIncX pageW pagePaddingLR 2 mul sub cageWidth 3 mul sub 2 div def
-/cellIncY pageH pagePaddingTB 2 mul sub cageHeight headerHeight add 4 mul sub 3 div def
+/cellIncX pageW pagePaddingLR 2 mul sub gCageWidth 3 mul sub 2 div def
+/cellIncY pageH pagePaddingTB 2 mul sub gCageHeight gHeaderHeight add 4 mul sub 3 div def
 
 /xStart pagePaddingLR def
-/yStart pageH pagePaddingTB sub cageHeight headerHeight add sub def
+/yStart pageH pagePaddingTB sub gCageHeight gHeaderHeight add sub def
 
 
 %main month loop
@@ -16,7 +17,7 @@
 	/rowN exch def
 	0 1 2 {
 		/colN exch def
-		calYear calMonth xStart cageWidth cellIncX add colN mul add yStart cageHeight headerHeight add cellIncY add rowN mul sub DrawMonth
+		calYear calMonth xStart gCageWidth cellIncX add colN mul add yStart gCageHeight gHeaderHeight add cellIncY add rowN mul sub _g DrawMonth
 		/calMonth calMonth 1 add def
 	} for
 } for

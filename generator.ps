@@ -11,21 +11,21 @@
 /pagePaddingLR 8 mm def
 /pagePaddingTB 30 mm def
 
-/cageHeight 40 mm def
-/headerHeight 8.5 mm def
-/cageWidth 58 mm def
+/gCageHeight 40 mm def
+/gHeaderHeight 8.5 mm def
+/gCageWidth 58 mm def
 
 /w [(Mo) (Tu) (We) (Th) (Fr) (Sa) (Su)] def
 /months [(January) (February) (March) (April) (May) (June) (July) (August) (September) (October) (November) (December)] def
 /calModeEnum <</fullpage 0 /diarymode 1>> def
-/calMode calModeEnum /diarymode get def
+/calMode calModeEnum /fullpage get def
 
-/headerFontHeight 5 mm def
-/dateFontHeight 4 mm def
+/gHeaderFontHeight 5 mm def
+/gDateFontHeight 4 mm def
 /LegendFontHeight 3 mm def
 /yearFontHeight 18 mm def
 
-/headerColor [1 0.701961 0.839216] def
+/gHeaderColor [1 0.701961 0.839216] def
 
 /publicHolidayColor [ 1 .8 0.894118] def
 /mercantileColor [1 0.901961	  0.945098] def
@@ -63,6 +63,46 @@ calMode calModeEnum /fullpage get eq {
 } ifelse
 
 << /PageSize [pageW pageH] >> setpagedevice
+
+/CloneDrawState {
+	10 dict
+	dup /headerHeight gHeaderHeight put
+	dup /cageWidth gCageWidth put
+	dup /cageHeight gCageHeight put
+	dup /headerColor gHeaderColor put
+	dup /headerFontHeight gHeaderFontHeight put
+	dup /dateFontHeight gDateFontHeight put
+} def
+
+%dicToDump
+/dumpDict {
+    % Expects a dictionary on the stack
+    dup type /dicttype ne {
+        (Error: Not a dictionary!\n) print
+        exit
+    } if
+    % Begin iterating over the dictionary
+    {
+        exch                             % value key → key value
+        (\nKey: ) print
+        dup type /nametype eq {
+            =                   % convert name to string and print
+        } {
+            print                       % print key
+        } ifelse
+        (  Value: ) print
+			dup type /arraytype eq {
+				(%array%) print
+			} {
+				dup type /dicttype eq {
+					(%dict%) print
+				} {
+					=
+				} ifelse
+			} ifelse
+        (\n) print
+    } forall
+} def
 
 /SetArrayColor {
 	{ } forall setrgbcolor
@@ -217,13 +257,16 @@ calMode calModeEnum /fullpage get eq {
 	grestore
 } def
 
-%upperRight {x, y}
+%upperRight {x, y} _g
 /DrawMonthCage {
+	/_g exch def
 	2 copy		
-	
+	/cageWidth _g /cageWidth get def
+	/cageHeight _g /cageHeight get def
+	/headerHeight _g /headerHeight get def
 	.5 setlinewidth
 	cageHeight add
-	headerColor SetArrayColor
+	_g /headerColor get SetArrayColor
 	cageWidth headerHeight rectfill
 	
 	0 0 0 setrgbcolor
@@ -303,13 +346,20 @@ calMode calModeEnum /fullpage get eq {
 	end
 } def
 
-%year monthIndex(starts from 1) llcX llcY
+%year monthIndex(starts from 1) llcX llcY _g
 /DrawMonth {
+	/_g exch def
 	/y0 exch def
 	/x0 exch def
 	/monthIndex exch def
 	/year exch def
-	drawCage true eq { x0 y0 DrawMonthCage} if
+	/headerHeight _g /headerHeight get def
+	/cageWidth _g /cageWidth get def
+	/cageHeight _g /cageHeight get def
+	/headerColor _g /headerColor get def
+	/headerFontHeight _g /headerFontHeight get def
+	/dateFontHeight _g /dateFontHeight get def
+	drawCage true eq { x0 y0 _g DrawMonthCage} if
 	selectedBoldFont findfont headerFontHeight scalefont setfont
 	/headerCenterX x0 cageWidth 2  div add def
 	/headerCenterY y0 cageHeight headerHeight 2 div add add def
@@ -417,5 +467,3 @@ calMode calModeEnum /fullpage get eq {
 		(Undefined calender Mode) ==
 	} ifelse
 } ifelse
-
-
