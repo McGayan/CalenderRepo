@@ -13,13 +13,13 @@
 /_headerFontHeight gHeaderFontHeight newFontScale mul def
 /_dateFontHeight gDateFontHeight newFontScale mul def
 /LegendFontHeight LegendFontHeight newFontScale mul def
-/poyacircleRadius poyacircleRadius newFontScale mul def
-/holidayRectWidth holidayRectWidth newFontScale mul def
+/_poyacircleRadius gPoyacircleRadius newFontScale mul def
+/_holidayRectWidth gHolidayRectWidth newFontScale mul def
 
 /_headerHeight gHeaderHeight newFontScale mul def
 /_cageHeight _cageHeight _headerHeight sub def
 
-/_g <</headerHeight _headerHeight /cageWidth _cageWidth /cageHeight _cageHeight /headerColor gHeaderColor /headerFontHeight _headerFontHeight /dateFontHeight _dateFontHeight>> def
+/G <</headerHeight _headerHeight /cageWidth _cageWidth /cageHeight _cageHeight /headerColor gHeaderColor /headerFontHeight _headerFontHeight /dateFontHeight _dateFontHeight /hightlite true /drawCage gDrawCage /poyacircleRadius _poyacircleRadius /holidayRectWidth _holidayRectWidth>> def
 
 /gridLinePitch 7 mm def
 
@@ -113,26 +113,68 @@
 	grestore
 } def
 
+/DrawStateForPreview {
+	/previewScale 3.5 def
+	15 dict
+	dup /headerHeight G /headerHeight get previewScale div put
+	dup /cageWidth G /cageWidth get previewScale div put
+	dup /cageHeight G /cageHeight get previewScale div put
+	dup /headerFontHeight G /headerFontHeight get previewScale div put
+	dup /dateFontHeight G /dateFontHeight get previewScale div put
+	dup /headerColor gHeaderColor put
+	dup /hightlite false put
+	dup /drawCage false put
+	dup /padding pagePaddingLR previewScale div put
+	dup /poyacircleRadius gPoyacircleRadius previewScale div put
+	dup /holidayRectWidth gHolidayRectWidth previewScale div put
+} def
+
+/_g_preview DrawStateForPreview def
+
+%year month llcX llcY _g
+/drawMiniMonth {
+	/_g_mini exch def
+	/y_mini exch def
+	/x_mini exch def
+	/_padding _g_mini /padding get def
+	1 1 1 setrgbcolor
+	x_mini y_mini _g_mini /cageWidth get _padding 2 mul add _g_mini /cageHeight get _padding 2 mul add rectfill
+	0 0 0 setrgbcolor
+	x_mini _padding add y_mini _padding add _g_mini DrawMonth
+} def
 
 1 2 12 {
-
 	/monthIndex_ exch def
 	/xStart pagePaddingLR def
 	/yStart pageH pagePaddingTB sub _cageHeight _headerHeight add sub def
 	/sDayFontH 8 def
-
-	calYear monthIndex_ xStart yStart _g DrawMonth
+	calYear monthIndex_ xStart yStart G DrawMonth
 	xStart yStart _cageWidth _cageHeight _headerHeight calYear printYear
-	pageW 2 div pageH 2 div pageW 2 div pageH 2 div exercise_book_page
 	xStart yStart sDayFontH getPitch sub _cageWidth sDayFontH monthIndex_ print_special_days
+	pageW 2 div pageH 2 div pageW 2 div pageH 2 div exercise_book_page
 
+	/yStartMini pageH pagePaddingTB sub _g_preview /cageHeight get _g_preview /headerHeight get add sub def
+	/tmpMonthIndex monthIndex_ 1 sub def
+	/tmpYear calYear def
+	monthIndex_ 1 eq {
+		/tmpMonthIndex 12 def
+		/tmpYear calYear 1 sub def
+	} if
+	tmpYear tmpMonthIndex pageW 2 div pagePaddingLR add yStartMini _g_preview drawMiniMonth
+	
 	/yStart yStart _cageHeight _headerHeight add pagePaddingTB 1.5 mul add sub def
-	calYear monthIndex_ 1 add xStart yStart _g DrawMonth
+	calYear monthIndex_ 1 add xStart yStart G DrawMonth
 	xStart yStart _cageWidth _cageHeight _headerHeight calYear printYear
-	pageW 2 div .5 pagePaddingTB mul pageW 2 div pageH 2 div exercise_book_page
 	xStart yStart sDayFontH getPitch sub _cageWidth sDayFontH monthIndex_ 1 add print_special_days
+	pageW 2 div .5 pagePaddingTB mul pageW 2 div pageH 2 div exercise_book_page
+
+	/xStartMini pageW pagePaddingTB sub _g_preview /cageWidth get _g_preview /padding get 2 mul add sub def
+	/tmpMonthIndex monthIndex_ 2 add def
+	/tmpYear calYear def
+	monthIndex_ 11 eq {
+		/tmpMonthIndex 1 def
+		/tmpYear calYear 1 add def
+	} if
+	tmpYear tmpMonthIndex xStartMini pagePaddingTB _g_preview drawMiniMonth
 	showpage
 } for
-
-
-

@@ -18,7 +18,7 @@
 /w [(Mo) (Tu) (We) (Th) (Fr) (Sa) (Su)] def
 /months [(January) (February) (March) (April) (May) (June) (July) (August) (September) (October) (November) (December)] def
 /calModeEnum <</fullpage 0 /diarymode 1>> def
-/calMode calModeEnum /fullpage get def
+/calMode calModeEnum /diarymode get def
 
 /gHeaderFontHeight 5 mm def
 /gDateFontHeight 4 mm def
@@ -29,12 +29,12 @@
 
 /publicHolidayColor [ 1 .8 0.894118] def
 /mercantileColor [1 0.901961	  0.945098] def
-/holidayRectWidth 5 mm def
-/poyacircleRadius 3 mm def
+/gHolidayRectWidth 5 mm def
+/gPoyacircleRadius 3 mm def
 
 /useSerifFont false def
 useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bold def} {/selectedFont /Helvetica def  /selectedBoldFont /Helvetica-Bold def} ifelse
-/drawCage true def
+/gDrawCage true def
 
 /holidays [[[13 (Duruthu Full Moon Poya Day) (f)] [14 (Tamil Thai Pongal Day) (MPB)]]
 [[04 (Independence Day) (MPB) ] [12 (Nawam Full Moon Poya Day) (f)] [26 (Maha Sivarathri Day) (PB)]]
@@ -65,13 +65,17 @@ calMode calModeEnum /fullpage get eq {
 << /PageSize [pageW pageH] >> setpagedevice
 
 /CloneDrawState {
-	10 dict
+	15 dict
 	dup /headerHeight gHeaderHeight put
 	dup /cageWidth gCageWidth put
 	dup /cageHeight gCageHeight put
 	dup /headerColor gHeaderColor put
 	dup /headerFontHeight gHeaderFontHeight put
 	dup /dateFontHeight gDateFontHeight put
+	dup /hightlite true put
+	dup /drawCage gDrawCage put
+	dup /poyacircleRadius gPoyacircleRadius put
+	dup /holidayRectWidth gHolidayRectWidth put
 } def
 
 %dicToDump
@@ -359,6 +363,9 @@ calMode calModeEnum /fullpage get eq {
 	/headerColor _g /headerColor get def
 	/headerFontHeight _g /headerFontHeight get def
 	/dateFontHeight _g /dateFontHeight get def
+	/drawCage _g /drawCage get def
+	/holidayRectWidth _g /holidayRectWidth get def
+	/poyacircleRadius _g /poyacircleRadius get def
 	drawCage true eq { x0 y0 _g DrawMonthCage} if
 	selectedBoldFont findfont headerFontHeight scalefont setfont
 	/headerCenterX x0 cageWidth 2  div add def
@@ -418,7 +425,7 @@ calMode calModeEnum /fullpage get eq {
 			} ifelse
 		} ifelse
 		/strDate mArr i get def
-		strDate (*) ne {
+		strDate (*) ne _g /hightlite get and{
 			/specialDay [-1] def
 			strDate cvi specialDayFrd 0 get eq {
 				/specialDay specialDayFrd def
