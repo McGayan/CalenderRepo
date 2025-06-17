@@ -21,7 +21,7 @@
 
 /G <</headerHeight _headerHeight /cageWidth _cageWidth /cageHeight _cageHeight /headerColor gHeaderColor /headerFontHeight _headerFontHeight /dateFontHeight _dateFontHeight /hightlite true /drawCage gDrawCage /poyacircleRadius _poyacircleRadius /holidayRectWidth _holidayRectWidth>> def
 
-/gridLinePitch 7 mm def
+/gridLinePitch 6 mm def
 
 %llcX, llcY, width, height
 /exercise_book_page {
@@ -138,8 +138,10 @@
 	/x_mini exch def
 	/_padding _g_mini /padding get def
 	1 1 1 setrgbcolor
-	x_mini y_mini _g_mini /cageWidth get _padding 2 mul add _g_mini /cageHeight get _padding 2 mul add rectfill
+	x_mini y_mini _g_mini /cageWidth get _padding 2 mul add _g_mini /cageHeight get _g_mini /headerHeight get add _padding 2 mul add rectfill
 	0 0 0 setrgbcolor
+	%x_mini y_mini _g_mini /cageWidth get _padding 2 mul add _g_mini /cageHeight get _g_mini /headerHeight get add _padding 2 mul add rectstroke
+
 	x_mini _padding add y_mini _padding add _g_mini DrawMonth
 } def
 
