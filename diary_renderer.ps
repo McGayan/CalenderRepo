@@ -137,11 +137,10 @@
 	/y_mini exch def
 	/x_mini exch def
 	/_padding _g_mini /padding get def
-	1 1 1 setrgbcolor
-	x_mini y_mini _g_mini /cageWidth get _padding 2 mul add _g_mini /cageHeight get _g_mini /headerHeight get add _padding 2 mul add rectfill
+	gMiniMonthBack SetArrayColor
+	x_mini y_mini _g_mini /cageWidth get _padding 2 mul add _g_mini /cageHeight get _g_mini /headerHeight get add _padding 2 mul add 5 FillRoundedRect
 	0 0 0 setrgbcolor
 	%x_mini y_mini _g_mini /cageWidth get _padding 2 mul add _g_mini /cageHeight get _g_mini /headerHeight get add _padding 2 mul add rectstroke
-
 	x_mini _padding add y_mini _padding add _g_mini DrawMonth
 } def
 

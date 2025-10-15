@@ -18,7 +18,7 @@
 /w [(Mo) (Tu) (We) (Th) (Fr) (Sa) (Su)] def
 /months [(January) (February) (March) (April) (May) (June) (July) (August) (September) (October) (November) (December)] def
 /calModeEnum <</fullpage 0 /diarymode 1>> def
-/calMode calModeEnum /diarymode get def
+/calMode calModeEnum /fullpage get def
 
 /gHeaderFontHeight 5 mm def
 /gDateFontHeight 4 mm def
@@ -31,6 +31,7 @@
 /mercantileColor [1 0.901961	  0.945098] def
 /gHolidayRectWidth 5 mm def
 /gPoyacircleRadius 3 mm def
+/gMiniMonthBack [.92 .95 .98] def
 
 /useSerifFont false def
 useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bold def} {/selectedFont /Helvetica def  /selectedBoldFont /Helvetica-Bold def} ifelse
@@ -407,6 +408,7 @@ calMode calModeEnum /fullpage get eq {
 		/arrayIndex arrayIndex 1 add def
 		/x exch incX add x add def
 	} forall
+	
 	0 0 0 setrgbcolor	%Reset to black from Red Sundays
 	/yPos yPos 1.4  incY mul sub def
 	selectedFont findfont dateFontHeight scalefont setfont
@@ -463,6 +465,27 @@ calMode calModeEnum /fullpage get eq {
 		0 0 0 setrgbcolor
 	}for
 
+} def
+
+%llcX, llcY, width, height, radius
+/FillRoundedRect {
+	/r exch def
+	/_h exch def
+	/_w exch def
+	/y exch def
+	/x exch def
+	
+	newpath
+	x r add y moveto
+	_w 2 r mul sub 0 rlineto
+	x _w add r sub y r add r 270 0 arc
+	0 _h 2 r mul sub rlineto
+	x _w add r sub y _h add r sub r 0 90 arc
+	_w 2 r mul sub -1 mul 0 rlineto
+	x r add y _h add r sub r 90 180 arc
+	0 _h 2 r mul sub -1 mul rlineto
+	x r add y r add r 180 270 arc
+	fill
 } def
 
 calMode calModeEnum /fullpage get eq {
