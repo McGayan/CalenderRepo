@@ -488,6 +488,85 @@ calMode calModeEnum /fullpage get eq {
 	fill
 } def
 
+
+% string, x, y
+/getTextBox {
+	% Get the font dictionary and retrieve FontBBox
+	/__y0 exch def
+	/__x0 exch def
+	gsave
+	__x0 __y0 moveto
+	stringwidth pop /__width exch def
+	currentfont /FontBBox get % Get FontBBox array [llx lly urx ury]
+	dup 0 get /__llcx exch def
+	dup 1 get /__llcy exch def
+	dup 2 get /__urcx exch def
+	3 get /__urcy exch def
+	/__fscale currentfont /FontMatrix get 0 get def
+	__urcy __llcy sub		  % height
+
+	__fscale mul /__height exch def % Scale to font size
+	__x0 __llcy __fscale mul __y0 add __width __height 4 array astore
+	grestore
+} def
+
+%box1 box2
+/mergebbox {
+    % Stack: bbox1 bbox2
+	/box2 exch def
+	/box1 exch def
+
+	/llc1x box1 0 get def
+	/llc1y box1 1 get def
+	/urc1x llc1x box1 2 get add def
+	/urc1y llc1y box1 3 get add def
+	
+    /llc2x box2 0 get def
+	/llc2y box2 1 get def
+	/urc2x llc2x box2 2 get add def
+	/urc2y llc2y box2 3 get add def
+	
+	llc2x llc1x lt {
+		/llc1x llc2x def
+	} if
+
+	llc2y llc1y lt {
+		/llc1y llc2y def
+	} if
+	
+	urc2x urc1x gt {
+		/urc1x urc2x def
+	} if
+	
+	urc2y urc1y gt {
+		/urc1y urc2y def
+	} if
+	/_w urc1x llc1x sub def
+	/_h urc1y llc1y sub def
+	[llc1x llc1y _w _h]
+} def
+
+%bbox
+/drawrect {
+    % Stack: [llx lly width height]
+
+    aload pop          % → llx lly width height
+    4 dict begin
+        /h exch def
+        /w exch def
+        /y exch def
+        /x exch def
+
+        newpath
+        x y moveto
+        w 0 rlineto
+        0 h rlineto
+        w neg 0 rlineto
+        closepath
+        stroke
+    end
+} bind def
+
 calMode calModeEnum /fullpage get eq {
 	(./fullpage_renderer.ps) run
 } {

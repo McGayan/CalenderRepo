@@ -22,6 +22,7 @@
 	} for
 } for
 
+/DrawCalenderPage {
 %Draw the year title
 selectedFont findfont yearFontHeight scalefont setfont
 /strYear 4 string def
@@ -48,3 +49,86 @@ xStart legendIncX 2 mul add 2 holidayRectWidth legendScale mul mul add legendBas
 xStart legendIncX 3 mul poyacircleRadius legendScale mul add add legendBaseLineY poyacircleRadius legendScale mul 0.5 mul add poyacircleRadius legendScale mul DrawBankHolidayMarker
 xStart legendIncX 3 mul add poyacircleRadius legendScale mul 3 mul add legendBaseLineY moveto
 (Bank Holiday) show
+} def
+
+DrawCalenderPage
+showpage
+
+%holydayEntry monthIndex
+/getHolidayStrings {
+	/monthIndex 0 def
+	/printArray 50 array def
+	/arrayIndex 0 def
+	months {
+		/original exch def
+		/monthStr 3 string def
+		monthStr 0 original 0 3 getinterval putinterval
+		holidays monthIndex get
+		{
+			dup 0 get 2 string cvs
+			dup length
+			1 eq{
+				(0) exch strcat
+			} if
+			monthStr (-) strcat
+			/tmpStr 3 1 roll exch strcat def	
+			2 array
+			dup 0 tmpStr put
+			dup 1 4 3 roll 1 get put
+			printArray arrayIndex 3 2 roll put
+			/arrayIndex arrayIndex 1 add def
+		} forall
+		
+		/monthIndex monthIndex 1 add def 
+	} forall
+	%copy only valid entries to a new array (pritArray is initialized with a length of 50)
+	/returnArray arrayIndex array def
+	0 1 arrayIndex 1 sub {
+		returnArray exch dup printArray exch get put
+	} for
+	returnArray
+} def
+
+/x pageW 10 div def
+/y pageH pageH 10 div sub def
+/fontSize 3.5 mm def
+/lineInc fontSize 1.35 mul def
+/xInc 50 def	%amount of increment in x-direction between date of the holiday and description
+/Times-Roman findfont fontSize scalefont setfont
+
+0 0 0 setrgbcolor
+
+/x 50 mm def
+/y 200 mm def
+/totalBox [1000000 1000000 -1000000 -1000000] def
+getHolidayStrings
+{
+	x y moveto
+	dup 0 get
+	x y getTextBox
+	/totalBox exch totalBox mergebbox def
+	x 25 mm add y moveto
+	1 get
+	x 25 mm add y getTextBox
+	/totalBox exch totalBox mergebbox def
+	/y y lineInc sub def
+} forall
+
+%totalBox drawrect
+
+/x pageW totalBox 2 get sub 2 div def
+/y pageH totalBox 3 get sub 2 div totalBox 3 get add def
+
+getHolidayStrings
+{
+	x y moveto
+	dup 0 get show
+
+	x 25 mm add y moveto
+	1 get show
+
+	/y y lineInc sub def
+}
+ forall
+
+showpage
