@@ -1,5 +1,5 @@
 %!ps
-/calYear 2025 def
+/calYear 2026 def
 
 /mm {2.83465 mul} def	%converts mm to points
 /point_mm {1 mm div} def	%converts poits to mm
@@ -36,19 +36,6 @@
 /useSerifFont false def
 useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bold def} {/selectedFont /Helvetica def  /selectedBoldFont /Helvetica-Bold def} ifelse
 /gDrawCage true def
-
-/holidays [[[13 (Duruthu Full Moon Poya Day) (f)] [14 (Tamil Thai Pongal Day) (MPB)]]
-[[04 (Independence Day) (MPB) ] [12 (Nawam Full Moon Poya Day) (f)] [26 (Maha Sivarathri Day) (PB)]]
-[[13 (Medin Full Moon Poya Day) (f)] [31 (Id-Ul-Fitr Ramazan Festival Day) (PB)]]
-[[12 (Bak Full Moon Poya Day) (f)] [13 (Day Prior to Sinhala and Tamil New Year Day) (MPB)] [14 (Sinhala and Tamil New Year Day) (MPB)] [15 (Special Bank Holiday) (B)] [18 (Good Friday) (PB)]]
-[[01 (May Day International Workers Day) (MPB)] [12 (Vesak Full Moon Poya Day) (f)] [13 (Day Following Vesak Full Moon Poya Day) (MPB)]]
-[[07 (Id-Ul-Alha Hadji Festival Day) (PB)] [10 (Poson Full Moon Poya Day) (f)]]
-[[10 (Esala Full Moon Poya Day) (f)]]
-[[08 (Nikini Full Moon Poya Day) (f)]]
-[[05 (Milad-Un-Nabi Holy Prophet’s Birthday) (MPB)] [07 (Binara Full Moon Poya Day) (f)]]
-[[06 (Vap Full Moon Poya Day) (f)] [20 (Deepavali Festival Day) (PB)]]
-[[05 (Il Full Moon Poya Day) (f)]]
-[[04 (Unduvap Full Moon Poya Day) (f)] [25 (Christmas Day) (MPB) ]]] def
 
 calMode calModeEnum /fullpage get eq {
 	(Render Mode: FullPage ------) ==
@@ -566,6 +553,9 @@ calMode calModeEnum /fullpage get eq {
         stroke
     end
 } bind def
+
+(./special_days.ps) run
+/holidays calYear get_specialdays def
 
 calMode calModeEnum /fullpage get eq {
 	(./fullpage_renderer.ps) run

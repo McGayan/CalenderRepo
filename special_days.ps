@@ -1,0 +1,38 @@
+%!ps
+
+/holidays_2025 [[[13 (Duruthu Full Moon Poya Day) (f)] [14 (Tamil Thai Pongal Day) (MPB)]]
+[[04 (Independence Day) (MPB) ] [12 (Nawam Full Moon Poya Day) (f)] [26 (Maha Sivarathri Day) (PB)]]
+[[13 (Medin Full Moon Poya Day) (f)] [31 (Id-Ul-Fitr Ramazan Festival Day) (PB)]]
+[[12 (Bak Full Moon Poya Day) (f)] [13 (Day Prior to Sinhala and Tamil New Year Day) (MPB)] [14 (Sinhala and Tamil New Year Day) (MPB)] [15 (Special Bank Holiday) (B)] [18 (Good Friday) (PB)]]
+[[01 (May Day International Workers Day) (MPB)] [12 (Vesak Full Moon Poya Day) (f)] [13 (Day Following Vesak Full Moon Poya Day) (MPB)]]
+[[07 (Id-Ul-Alha Hadji Festival Day) (PB)] [10 (Poson Full Moon Poya Day) (f)]]
+[[10 (Esala Full Moon Poya Day) (f)]]
+[[08 (Nikini Full Moon Poya Day) (f)]]
+[[05 (Milad-Un-Nabi Holy Prophet’s Birthday) (MPB)] [07 (Binara Full Moon Poya Day) (f)]]
+[[06 (Vap Full Moon Poya Day) (f)] [20 (Deepavali Festival Day) (PB)]]
+[[05 (Il Full Moon Poya Day) (f)]]
+[[04 (Unduvap Full Moon Poya Day) (f)] [25 (Christmas Day) (MPB) ]]] def
+
+/holidays_2026 [[[03 (Duruthu Full Moon Poya Day) (f)] [15 (Tamil Thai Pongal Day) (MPB)]]
+[[01 (Nawam Full Moon Poya Day) (f)] [04 (Independence Day) (PBM)] [15 (Maha Sivarathri Day) (PB)]]
+[[02 (Medin Full Moon Poya Day) (f)] [21 (Id-Ul-Fitr Ramazan Festival Day) (PB)]]
+[[01 (Bak Full Moon Poya Day) (f)] [03 (Good Friday) (PB)] [13 (Day Prior to Sinhala and Tamil New Year Day) (MPB)] [14 (Sinhala and Tamil New Year Day) (MPB)]]
+[[01 (Vesak Full Moon Poya Day) (f)] [01 (May Day International Workers Day) (MPB)] [02 (Day Following Vesak Full Moon Poya Day) (MPB)] [28 (Id-Ul-Alha Hadji Festival Day) (PB)] [30 (Adhi Poson Full Moon Poya Day) (PB)]]
+[[29 (Poson Full Moon Poya Day) (f)]]
+[[29 (Esala Full Moon Poya Day) (f)]]
+[[26 (Milad-Un-Nabi Holy Prophet’s Birthday) (MPB)] [27 (Nikini Full Moon Poya Day) (f)]]
+[[26 (Binara Full Moon Poya Day) (f)]]
+[[25 (Vap Full Moon Poya Day) (f)]]
+[[08 (Deepavali Festival Day) (PB)] [24 (Il Full Moon Poya Day) (f)]]
+[[23 (Unduvap Full Moon Poya Day) (f)] [25 (Christmas Day) (MPB)]]] def
+
+2 array
+dup 0 holidays_2025 put
+dup 1 holidays_2026 put
+/_h_list exch def
+
+% year
+/get_specialdays {
+	2025 sub
+	_h_list exch get
+} def
