@@ -381,6 +381,8 @@ calMode calModeEnum /fullpage get eq {
 	/posXArr 7 array def
 	/arrayIndex 0 def
 	/monthSpecialArr holidays monthIndex 1 sub get def
+	%Foward and backward searching of holidays is because dates in mArray can contains
+	%ending dates at the biggining. i.e: 30 31 * * * 1 2
 	/specialArrIndexFrwd 0 def
 	/specialArrIndexBcwd monthSpecialArr length 0 gt{ monthSpecialArr length 1 sub} {-1} ifelse  def
 	/specialDayFrd  monthSpecialArr length specialArrIndexFrwd gt {monthSpecialArr specialArrIndexFrwd get} {[-1 (n) (n)]} ifelse def
@@ -415,38 +417,44 @@ calMode calModeEnum /fullpage get eq {
 		} ifelse
 		/strDate mArr i get def
 		strDate (*) ne _g /hightlite get and{
-			/specialDay [-1] def
-			strDate cvi specialDayFrd 0 get eq {
-				/specialDay specialDayFrd def
-				/specialArrIndexFrwd specialArrIndexFrwd 1 add def
-				/specialDayFrd monthSpecialArr length specialArrIndexFrwd gt {monthSpecialArr specialArrIndexFrwd get} {[-1 (n) (n)] } ifelse def
-			} {
-				strDate cvi specialDayBcwd 0 get eq {
-					/specialDay specialDayBcwd def
-					/specialArrIndexBcwd specialArrIndexBcwd 1 sub def
-					/specialDayBcwd specialArrIndexBcwd -1 gt {monthSpecialArr specialArrIndexBcwd get} {[-1 (n) (n)]} ifelse def
-				} if
-			} ifelse
-			strDate cvi specialDay 0 get eq {
-				/cellCenterX posXArr weekI get strDate stringwidth pop 2 div sub def
-				/cellCenterY yPos getBaseToCenterYDis add def
-				specialDay 2 get 0 get (f) 0 get eq { %poya day
-						cellCenterX cellCenterY poyacircleRadius DrawPoyadayMarker
+			{%need this loop on doAgain variable to handle multiple holiday entries on a same day.
+				/doAgain false def
+				/specialDay [-1] def
+				strDate cvi specialDayFrd 0 get eq {
+					/specialDay specialDayFrd def
+					/specialArrIndexFrwd specialArrIndexFrwd 1 add def
+					/specialDayFrd monthSpecialArr length specialArrIndexFrwd gt {monthSpecialArr specialArrIndexFrwd get} {[-1 (n) (n)] } ifelse def
+					strDate cvi specialDayFrd 0 get eq {/doAgain true def} if
 				} {
-					specialDay 2 get 0 get (M) 0 get eq {% Mercantile holiday
-						cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth DrawMercentileMarker
+					strDate cvi specialDayBcwd 0 get eq {
+						/specialDay specialDayBcwd def
+						/specialArrIndexBcwd specialArrIndexBcwd 1 sub def
+						/specialDayBcwd specialArrIndexBcwd -1 gt {monthSpecialArr specialArrIndexBcwd get} {[-1 (n) (n)]} ifelse def
+						strDate cvi specialDayBcwd 0 get eq {/doAgain true def} if
+					} if
+				} ifelse
+				strDate cvi specialDay 0 get eq {
+					/cellCenterX posXArr weekI get strDate stringwidth pop 2 div sub def
+					/cellCenterY yPos getBaseToCenterYDis add def
+					specialDay 2 get 0 get (f) 0 get eq { %poya day
+							cellCenterX cellCenterY poyacircleRadius DrawPoyadayMarker
 					} {
-						specialDay 2 get 0 get (P) 0 get eq {% Public holiday
-							
-							cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth DrawPublicHolidayMarker
+						specialDay 2 get 0 get (M) 0 get eq {% Mercantile holiday
+							cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth DrawMercentileMarker
 						} {
-							specialDay 2 get 0 get (B) 0 get eq {% Mercantile holiday 
-								cellCenterX cellCenterY poyacircleRadius DrawBankHolidayMarker
-							} if
+							specialDay 2 get 0 get (P) 0 get eq {% Public holiday
+								
+								cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth DrawPublicHolidayMarker
+							} {
+								specialDay 2 get 0 get (B) 0 get eq {% Mercantile holiday 
+									cellCenterX cellCenterY poyacircleRadius DrawBankHolidayMarker
+								} if
+							} ifelse
 						} ifelse
 					} ifelse
-				} ifelse
-			} if
+				} if
+				doAgain not { exit } if
+			}loop
 		} if
 		strDate posXArr weekI get yPos DrawText_baseline_right_aligned
 		0 0 0 setrgbcolor
