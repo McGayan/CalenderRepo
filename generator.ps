@@ -25,10 +25,11 @@
 /LegendFontHeight 3 mm def
 /yearFontHeight 18 mm def
 
-/gHeaderColor [1 0.701961 0.839216] def
-
+/gHeaderColor [240 255 div 205 255 div 55 255 div] def
+/deriveSpecialColors true def	%derive special colors from header color
 /publicHolidayColor [ 1 .8 0.894118] def
-/mercantileColor [1 0.901961	  0.945098] def
+/mercantileColor [1 0.901961 0.945098] def
+
 /gHolidayRectWidth 5 mm def
 /gPoyacircleRadius 3 mm def
 /gMiniMonthBack [.92 .95 .98] def
@@ -51,6 +52,27 @@ calMode calModeEnum /fullpage get eq {
 } ifelse
 
 << /PageSize [pageW pageH] >> setpagedevice
+
+%color, scale
+/GetLightenColor {
+	/__scale exch def
+	/__colArr exch def
+	/__newColArr 3 array def
+	/__i 0 def
+	__colArr {
+		__scale mul
+		dup 1 gt {pop 1} if
+
+		__newColArr __i  3 2 roll put
+		/__i __i 1 add def
+	}forall
+	__newColArr
+} def
+
+true deriveSpecialColors eq {
+	/publicHolidayColor gHeaderColor 1.1 GetLightenColor def
+	/mercantileColor gHeaderColor 3 GetLightenColor def
+} if
 
 /CloneDrawState {
 	15 dict
