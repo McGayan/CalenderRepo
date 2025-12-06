@@ -1,5 +1,5 @@
 %!ps
-/calYear 2026 def
+/calYear 2025 def
 
 /mm {2.83465 mul} def	%converts mm to points
 /point_mm {1 mm div} def	%converts poits to mm
@@ -360,6 +360,33 @@ true deriveSpecialColors eq {
 	end
 } def
 
+%cellCenterX cellCenterY _g dayDescryptor
+/MarkSpecialDay {
+	/dayDescryptor exch def
+	/_g exch def
+	/cellCenterY exch def
+	/cellCenterX exch def
+	/holidayRectWidth _g /holidayRectWidth get def
+	/poyacircleRadius _g /poyacircleRadius get def
+	
+	dayDescryptor (f) 0 get eq { %poya day
+			cellCenterX cellCenterY poyacircleRadius DrawPoyadayMarker
+	} {
+		dayDescryptor (M) 0 get eq {% Mercantile holiday
+			cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth DrawMercentileMarker
+		} {
+			dayDescryptor (P) 0 get eq {% Public holiday
+				
+				cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth DrawPublicHolidayMarker
+			} {
+				dayDescryptor (B) 0 get eq {% Mercantile holiday 
+					cellCenterX cellCenterY poyacircleRadius DrawBankHolidayMarker
+				} if
+			} ifelse
+		} ifelse
+	} ifelse
+} def
+
 %year monthIndex(starts from 1) llcX llcY _g
 /DrawMonth {
 	/_g exch def
@@ -374,8 +401,6 @@ true deriveSpecialColors eq {
 	/headerFontHeight _g /headerFontHeight get def
 	/dateFontHeight _g /dateFontHeight get def
 	/drawCage _g /drawCage get def
-	/holidayRectWidth _g /holidayRectWidth get def
-	/poyacircleRadius _g /poyacircleRadius get def
 	drawCage true eq { x0 y0 _g DrawMonthCage} if
 	selectedBoldFont findfont headerFontHeight scalefont setfont
 	/headerCenterX x0 cageWidth 2  div add def
@@ -456,24 +481,10 @@ true deriveSpecialColors eq {
 					} if
 				} ifelse
 				strDate cvi specialDay 0 get eq {
+					%Mark special day
 					/cellCenterX posXArr weekI get strDate stringwidth pop 2 div sub def
 					/cellCenterY yPos getBaseToCenterYDis add def
-					specialDay 2 get 0 get (f) 0 get eq { %poya day
-							cellCenterX cellCenterY poyacircleRadius DrawPoyadayMarker
-					} {
-						specialDay 2 get 0 get (M) 0 get eq {% Mercantile holiday
-							cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth DrawMercentileMarker
-						} {
-							specialDay 2 get 0 get (P) 0 get eq {% Public holiday
-								
-								cellCenterX holidayRectWidth 2 div sub cellCenterY holidayRectWidth 2 div sub holidayRectWidth holidayRectWidth DrawPublicHolidayMarker
-							} {
-								specialDay 2 get 0 get (B) 0 get eq {% Mercantile holiday 
-									cellCenterX cellCenterY poyacircleRadius DrawBankHolidayMarker
-								} if
-							} ifelse
-						} ifelse
-					} ifelse
+					cellCenterX cellCenterY _g specialDay 2 get 0 get MarkSpecialDay
 				} if
 				doAgain not { exit } if
 			}loop

@@ -33,7 +33,7 @@ strYear pageW 2 div pageH pagePaddingTB .6 mul sub  DrawText_center_aligned
 /legendScale 0.75 def
 selectedFont findfont LegendFontHeight scalefont setfont
 /legendBaseLineY .75 pagePaddingTB mul def
-/legendIncX pageW pagePaddingLR 2 mul sub 5 div def
+/legendIncX pageW pagePaddingLR 2 mul sub 4 div def
 xStart legendBaseLineY holidayRectWidth legendScale mul holidayRectWidth legendScale mul DrawPublicHolidayMarker
 pagePaddingLR 2 holidayRectWidth legendScale mul mul add legendBaseLineY moveto
 (Public Holiday) show
@@ -54,7 +54,6 @@ xStart legendIncX 3 mul add poyacircleRadius legendScale mul 3 mul add legendBas
 DrawCalenderPage
 showpage
 
-%holydayEntry monthIndex
 /getHolidayStrings {
 	/monthIndex 0 def
 	/printArray 50 array def
@@ -71,10 +70,12 @@ showpage
 				(0) exch strcat
 			} if
 			monthStr (-) strcat
-			/tmpStr 3 1 roll exch strcat def	
-			2 array
+			/tmpStr 3 1 roll exch strcat def
+			dup
+			3 array
 			dup 0 tmpStr put
 			dup 1 4 3 roll 1 get put
+			dup 2 4 3 roll 2 get put
 			printArray arrayIndex 3 2 roll put
 			/arrayIndex arrayIndex 1 add def
 		} forall
@@ -91,7 +92,7 @@ showpage
 
 /x pageW 10 div def
 /y pageH pageH 10 div sub def
-/fontSize 3.5 mm def
+/fontSize 3.5 mm def	%10 points
 /lineInc fontSize 1.35 mul def
 /xInc 50 def	%amount of increment in x-direction between date of the holiday and description
 /Times-Roman findfont fontSize scalefont setfont
@@ -100,7 +101,10 @@ showpage
 
 /x 50 mm def
 /y 200 mm def
+%Print the list of special days
+%First get the total bounding box - without printing
 /totalBox [1000000 1000000 -1000000 -1000000] def
+[
 getHolidayStrings
 {
 	x y moveto
@@ -110,25 +114,81 @@ getHolidayStrings
 	x 25 mm add y moveto
 	1 get
 	x 25 mm add y getTextBox
-	/totalBox exch totalBox mergebbox def
+	dup totalBox mergebbox
+	/totalBox exch def
+	2 get
 	/y y lineInc sub def
 } forall
+] /widthArray exch def	%widthArray contains the end x of each line
 
 %totalBox drawrect
+
+%descryptorString endOfLineX baseLineY
+/drawSpecialDayMarkers {
+	/baseLineY exch def
+	/endOfLineX exch 10 add def
+	/descryptorStr exch def
+	/_gNew CloneDrawState def
+	/markerSize fontSize 0.6 mul def
+	_gNew /poyacircleRadius markerSize 2 div put
+	_gNew /holidayRectWidth markerSize put
+	/_centerX endOfLineX def
+	/_centerY baseLineY markerSize 2 div add def
+	
+	descryptorStr {
+		/c exch def
+		%cellCenterX cellCenterY _g dayDescryptor
+		_centerX _centerY _gNew c MarkSpecialDay 
+		/_centerX _centerX markerSize 1.3 mul add def
+	} forall
+} def
 
 /x pageW totalBox 2 get sub 2 div def
 /y pageH totalBox 3 get sub 2 div totalBox 3 get add def
 
+%/x 50 mm def
+%/y 200 mm def
+
+/holidayIndex 0 def
+%print the list of special days
 getHolidayStrings
 {
 	x y moveto
 	dup 0 get show
 
 	x 25 mm add y moveto
-	1 get show
+	dup 1 get show
 
+	%x 25 mm add widthArray holidayIndex get add y moveto
+	%(X) show
+	2 get x 25 mm add widthArray holidayIndex get add y drawSpecialDayMarkers
 	/y y lineInc sub def
-}
- forall
+	/holidayIndex holidayIndex 1 add def
+} forall
 
+
+%Printing the legend following the holiday list
+/fontSize fontSize .8 mul def
+/Times-Roman findfont fontSize scalefont setfont
+/x pageW totalBox 2 get sub 2 div def
+/y pageH totalBox 3 get sub 2 div def
+/y y fontSize sub def	% add extra y spacing
+
+/markerSize fontSize 0.6 mul def
+/deltaX totalBox 2 get 4 div def
+%Each element of the following array contains the text to show and the holiday drawing operators. 
+%Special gynmastic for poya and bank markers are,
+%1. They accepts only 3 parameters (other 2 needs 4). so the pop removes this extra parameter
+%2. divide width by 2 to make it radius 
+%3. lift the y value by adding radius to the existing y value
+[[(Public Holiday) {DrawPublicHolidayMarker}] [(Poya Day) {pop 2 div dup 3 2 roll add exch DrawPoyadayMarker}] [(Mercentile) {DrawMercentileMarker}] [(Bank) {pop 2 div dup 3 2 roll add exch DrawBankHolidayMarker}]]
+{
+	dup 1 get
+	x markerSize 2 div add y markerSize markerSize 5 4 roll exec
+	x markerSize 2 mul add y moveto
+	0 get show
+	/x x deltaX add def
+} forall
+%x totalBox 2 get add markerSize 2 div add y markerSize 2 div DrawPoyadayMarker
+%() show
 showpage
