@@ -59,39 +59,41 @@
 
 %llcX, llcY, cageWidth, fontHeight, monthIndex
 /print_special_days {
-	/monthI exch 1 sub def
-	/fHeight exch def
-	/cw exch def
-	/y0 exch def
-	/x0 exch def
-	/monthEntry holidays monthI get def
-	gsave
-	0.1 setgray
-	/tmpStr 20 string def
-	selectedFont findfont fHeight scalefont setfont
-	/sDayCount monthEntry length def
-	0 2 sDayCount 1 sub {
-		/x x0 def
-		/dayI exch def
-		/dayEntry monthEntry dayI get def
-		dayEntry 0 get tmpStr cvs
-		(: ) strcat
-		dayEntry 1 get strcat
-		x y0 moveto
-		show
-		dayI 1 add sDayCount lt {
-			/dayI dayI 1 add def
-			/x x cw 2 div add def
+	holidays length 0 ne {
+		/monthI exch 1 sub def
+		/fHeight exch def
+		/cw exch def
+		/y0 exch def
+		/x0 exch def
+		/monthEntry holidays monthI get def
+		gsave
+		0.1 setgray
+		/tmpStr 20 string def
+		selectedFont findfont fHeight scalefont setfont
+		/sDayCount monthEntry length def
+		0 2 sDayCount 1 sub {
+			/x x0 def
+			/dayI exch def
 			/dayEntry monthEntry dayI get def
 			dayEntry 0 get tmpStr cvs
 			(: ) strcat
 			dayEntry 1 get strcat
 			x y0 moveto
 			show
-		} if
-		/y0 y0 fHeight getPitch sub def
-	} for
-	grestore
+			dayI 1 add sDayCount lt {
+				/dayI dayI 1 add def
+				/x x cw 2 div add def
+				/dayEntry monthEntry dayI get def
+				dayEntry 0 get tmpStr cvs
+				(: ) strcat
+				dayEntry 1 get strcat
+				x y0 moveto
+				show
+			} if
+			/y0 y0 fHeight getPitch sub def
+		} for
+		grestore
+	} if
 } def
 
 %llcX, llcY, cageWidth, cageHeight, headerHeight, year

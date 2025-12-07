@@ -8,7 +8,7 @@
 [[07 (Id-Ul-Alha Hadji Festival Day) (PB)] [10 (Poson Full Moon Poya Day) (f)]]
 [[10 (Esala Full Moon Poya Day) (f)]]
 [[08 (Nikini Full Moon Poya Day) (f)]]
-[[05 (Milad-Un-Nabi Holy Prophet’s Birthday) (MPB)] [07 (Binara Full Moon Poya Day) (f)]]
+[[05 (Milad-Un-Nabi Holy Prophet's Birthday) (MPB)] [07 (Binara Full Moon Poya Day) (f)]]
 [[06 (Vap Full Moon Poya Day) (f)] [20 (Deepavali Festival Day) (PB)]]
 [[05 (Il Full Moon Poya Day) (f)]]
 [[04 (Unduvap Full Moon Poya Day) (f)] [25 (Christmas Day) (MPB) ]]] def
@@ -20,7 +20,7 @@
 [[01 (Vesak Full Moon Poya Day) (f)] [01 (May Day International Workers Day) (MPB)] [02 (Day Following Vesak Full Moon Poya Day) (MPB)] [28 (Id-Ul-Alha Hadji Festival Day) (PB)] [30 (Adhi Poson Full Moon Poya Day) (PB)]]
 [[29 (Poson Full Moon Poya Day) (f)]]
 [[29 (Esala Full Moon Poya Day) (f)]]
-[[26 (Milad-Un-Nabi Holy Prophet’s Birthday) (MPB)] [27 (Nikini Full Moon Poya Day) (f)]]
+[[26 (Milad-Un-Nabi Holy Prophet's Birthday) (MPB)] [27 (Nikini Full Moon Poya Day) (f)]]
 [[26 (Binara Full Moon Poya Day) (f)]]
 [[25 (Vap Full Moon Poya Day) (f)]]
 [[08 (Deepavali Festival Day) (PB)] [24 (Il Full Moon Poya Day) (f)]]
@@ -33,6 +33,13 @@ dup 1 holidays_2026 put
 
 % year
 /get_specialdays {
-	2025 sub
-	_h_list exch get
+	/index exch 2025 sub def
+	index 0 ge index 2 lt and
+	{
+		_h_list index get
+	}
+	{
+		(No Special days awailable) ==
+		[]
+	} ifelse
 } def
