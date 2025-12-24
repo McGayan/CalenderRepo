@@ -1,5 +1,5 @@
 %!ps
-/pagePaddingTB pagePaddingTB 3 div def
+/pagePaddingTB pagePaddingTB 2.5 div def
 
 /_cageWidth pageW 2 div pagePaddingLR 2 mul sub def
 /_cageHeight pageH 2 div pagePaddingTB 2 mul sub def
@@ -37,7 +37,7 @@
 		/lineIndex exch def
 		%gridLinePitch ==
 		x y moveto
-		x pw pagePaddingTB 2 mul sub add y lineto
+		x pw pagePaddingLR 2 mul sub add y lineto
 		stroke
 		/y y gridLinePitch add def
 	} for
@@ -169,7 +169,7 @@
 	xStart yStart sDayFontH getPitch sub _cageWidth sDayFontH monthIndex_ 1 add print_special_days
 	pageW 2 div .5 pagePaddingTB mul pageW 2 div pageH 2 div exercise_book_page
 
-	/xStartMini pageW pagePaddingTB sub _g_preview /cageWidth get _g_preview /padding get 2 mul add sub def
+	/xStartMini pageW pagePaddingLR sub _g_preview /cageWidth get _g_preview /padding get 2 mul add sub def
 	/tmpMonthIndex monthIndex_ 2 add def
 	/tmpYear calYear def
 	monthIndex_ 11 eq {
