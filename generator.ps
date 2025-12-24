@@ -1,42 +1,14 @@
 %!ps
-/calYear 2026 def
 
 /mm {2.83465 mul} def	%converts mm to points
 /point_mm {1 mm div} def	%converts poits to mm
 /inch {72 mul} def  %converts inch to points
 
-/pageH 297 mm def
-/pageW 210 mm def
-
-/pagePaddingLR 8 mm def
-/pagePaddingTB 30 mm def
-
-/gCageHeight 40 mm def
-/gHeaderHeight 8.5 mm def
-/gCageWidth 58 mm def
-
 /w [(Mo) (Tu) (We) (Th) (Fr) (Sa) (Su)] def
 /months [(January) (February) (March) (April) (May) (June) (July) (August) (September) (October) (November) (December)] def
 /calModeEnum <</fullpage 0 /diarymode 1>> def
-/calMode calModeEnum /diarymode get def
 
-/gHeaderFontHeight 5 mm def
-/gDateFontHeight 4 mm def
-/LegendFontHeight 3 mm def
-/yearFontHeight 18 mm def
-
-/gHeaderColor [240 255 div 205 255 div 55 255 div] def
-/deriveSpecialColors true def	%derive special colors from header color
-/publicHolidayColor [ 1 .8 0.894118] def
-/mercantileColor [1 0.901961 0.945098] def
-
-/gHolidayRectWidth 5 mm def
-/gPoyacircleRadius 3 mm def
-/gMiniMonthBack [.92 .95 .98] def
-
-/useSerifFont false def
-useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bold def} {/selectedFont /Helvetica def  /selectedBoldFont /Helvetica-Bold def} ifelse
-/gDrawCage true def
+(./config.ps) run
 
 calMode calModeEnum /fullpage get eq {
 	(Render Mode: FullPage ------) ==
@@ -50,6 +22,9 @@ calMode calModeEnum /fullpage get eq {
 		(Undefined calender Mode) ==
 	} ifelse
 } ifelse
+
+useSerifFont true eq {/selectedFont /Times-Roman def /selectedBoldFont /Times-Bold def} {/selectedFont /Helvetica def  /selectedBoldFont /Helvetica-Bold def} ifelse
+
 
 << /PageSize [pageW pageH] >> setpagedevice
 

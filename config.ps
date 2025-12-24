@@ -1,0 +1,48 @@
+%!ps
+%Calender Year
+/calYear 2026 def
+
+%Calender rendering mode.
+%	1. fullpage
+%	2. diarymode
+/calMode calModeEnum /diarymode get def
+
+%page size
+/pageH 297 mm def
+/pageW 210 mm def
+
+%Page padding to left and right sides
+/pagePaddingLR 8 mm def
+%Page padding to top and bottom sides
+/pagePaddingTB 30 mm def
+
+%Following sizes are defined for fullpage style rendering.
+%These will be scaled for other styles
+/gCageHeight 40 mm def
+/gHeaderHeight 8.5 mm def
+/gCageWidth 58 mm def
+
+%Font heights
+/gHeaderFontHeight 5 mm def
+/gDateFontHeight 4 mm def
+/LegendFontHeight 3 mm def
+/yearFontHeight 18 mm def
+
+%Color of the page header
+/gHeaderColor [240 255 div 205 255 div 55 255 div] def
+%Define the holiday marker colors
+/publicHolidayColor [ 1 .8 0.894118] def
+/mercantileColor [1 0.901961 0.945098] def
+%Derive the holiday colors from header color and replace
+%the defined holiday colors with derived colors.
+/deriveSpecialColors true def	%derive special colors from header color
+
+/gHolidayRectWidth 5 mm def
+/gPoyacircleRadius 3 mm def
+/gMiniMonthBack [.92 .95 .98] def
+
+%Use PostScript serif typeface if true. Otherwise sans-serif typeface will be selected
+/useSerifFont false def
+
+%Stroke the cage in black if true
+/gDrawCage true def
