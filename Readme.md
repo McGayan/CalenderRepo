@@ -1,80 +1,27 @@
 # Calendar Generator
-A fully customizable calendar generator. Renders calendar to fit into a given page size. Holiday/Special day highlighting ins also available but mainly focusses on Sri Lankan calendar.
-
+A fully customizable calendar generator. Renders calendar to fit into a given page size. Holiday/Special day highlighting is also available but mainly focusses on Sri Lankan calendar. 
+* Basic Mode
+  All the 12 months are rendered on a single side of the page. The list of holidays is printed on the other side. Default settings will print it on a A4 paper.
+* Planner Mode
+  In this mode two months and note keeping area per page is provided. The default setting creates 6 A4 size pages in landscape orientation.
 ## Customization
-### Define the sizes
-All size distance values should be provided in millimeters.
-
-* Change Calendar year
-	Change the calendar year by changing the calYear variable
-```postscript
-/calYear 2025 def
-```
-
-* Page size
-	Provide the page size
-
-```postscript
-%Following page sizes defines an A4 paper
-/pageH 297 mm def	%height of the page
-/pageW 210 mm def	%width of the page
-```
-
-* page margins
-Define top/bottom and left/right margins with following setting
-
-```postscript
-/pagePaddingLR 8 mm def
-/pagePaddingTB 30 mm def
-```
-
-* Month cage sizes
-Specify the size of the cage which defines the size of the month. This includes the day of the week column and 5 columns for the dates of the month.
-```postscript
-/cageHeight 40 mm def
-/cageWidth 58 mm def
-```
-Header height defines the header of the month cage. The header contains the label of the month.
-```postscript
-/headerHeight 8.5 mm def
-```
-###Font Settings
-* Following setting defines the size of the font of the main header, the calendar year at the top of the page.
-
-```postscript
-/yearFontHeight 18 mm def
-```
-
-#Defines the font size of the days of week row
-```postscript
-/headerFontHeight 5 mm def
-
-```
-* Define the height of the dates of the month.
-```postscript
-/dateFontHeight 4 mm def
-```
-
-* Font size of the legend section
-```postscript
-/LegendFontHeight 3 mm def
-```
-* Following setting defines the used typeface. If the variable is set to 'true', a Serif typeface (ex. Times-Roman) will be used. Otherwise a sans-serif typeface (ex. Helvetica) will be used.
-```postscript
-/useSerifFont true def
-```
-
-### Colors
-* Color of the header of the month cage. The colors are defined as a array of R, G and B components of the color.
-```postscript
-/headerColor [.67 .91 .99] def
-```
-
-### Holiday configurations
-	The holiday highlighting support mainly covers Sri Lankan calendar. The Holidays are defined as array of holiday entries. Each holiday entry defines an single holiday and it is also an array.
+The customizations can be done by changing appropriate variables in the `config.ps` file.
+## Holiday configurations
+The holiday lists are avialable in the `special_days.ps` file.
 
 
 ## Running
-Easiest way to run and render a PostScript code is by using GhostScript tools. Download and install the latest versio of using https://ghostscript.com/releases/gsdnld.html .
+This program requires a PostScript interpreter to run. It is tested with GhostScript interpreter. Install the GhostScript first.
 
-## Building the PDF
+* In Windows use the following batch files
+	* Run in the interpreter:
+		Use `run-ms.bat`
+	* Build the PDF:
+		Use `buildpdf.bat`\
+**Note:** The batch files expect the interpreter (`gswin32c.exe`) can be found via the enviorenment variables. If not provide the full path in the batch files
+
+* In Linux use the following shell scripts.
+	* Run in the interpreter:
+		Use `run-linux.sh`
+	* Build the PDF:
+		Use `buildpdf.sh`
