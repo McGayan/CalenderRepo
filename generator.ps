@@ -6,15 +6,15 @@
 
 /w [(Mo) (Tu) (We) (Th) (Fr) (Sa) (Su)] def
 /months [(January) (February) (March) (April) (May) (June) (July) (August) (September) (October) (November) (December)] def
-/calModeEnum <</fullpage 0 /diarymode 1>> def
+/calModeEnum <</fullpage 0 /plannermode 1>> def
 
 (./config.ps) run
 
 calMode calModeEnum /fullpage get eq {
 	(Render Mode: FullPage ------) ==
 } {
-	calMode calModeEnum /diarymode get eq {
-		(Render Mode: Diary ------) ==
+	calMode calModeEnum /plannermode get eq {
+		(Render Mode: Planner ------) ==
 		/tmp pageH def
 		/pageH pageW def
 		/pageW tmp def
@@ -577,8 +577,8 @@ true deriveSpecialColors eq {
 calMode calModeEnum /fullpage get eq {
 	(./fullpage_renderer.ps) run
 } {
-	calMode calModeEnum /diarymode get eq {
-	   (./diary_renderer.ps) run
+	calMode calModeEnum /plannermode get eq {
+	   (./planner_renderer.ps) run
 	} {
 		(Undefined calender Mode) ==
 	} ifelse
