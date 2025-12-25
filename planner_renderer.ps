@@ -177,5 +177,11 @@
 		/tmpYear calYear 1 add def
 	} if
 	tmpYear tmpMonthIndex xStartMini pagePaddingTB _g_preview drawMiniMonth
+	
+	%print repository url
+	pageW 2 div pagePaddingLR add .75 pagePaddingTB mul moveto
+	gitUrlGrayLevel setgray
+	selectedFont findfont gitUrlFontHeight scalefont setfont
+	gitUrl show
 	showpage
 } for

@@ -54,8 +54,14 @@
 } def
 
 DrawCalenderPage
+/legendBaseLineY .5 pagePaddingTB mul def
+xStart legendBaseLineY moveto
+gitUrlGrayLevel setgray
+selectedFont findfont gitUrlFontHeight scalefont setfont
+gitUrl show
 showpage
 
+%Show holiday list on the secoend page.
 /getHolidayStrings {
 	/monthIndex 0 def
 	/printArray 50 array def
